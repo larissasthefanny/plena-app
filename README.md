@@ -67,10 +67,10 @@ No diretório `backend/`, crie um arquivo `.env` baseado no `.env.example`:
 ```env
 DB_HOST=localhost
 DB_PORT=5432
-DB_USER=plena_user
-DB_PASSWORD=plena_password
+DB_USER=user
+DB_PASSWORD=password
 DB_NAME=plena_db
-JWT_SECRET=sua_chave_secreta_super_segura
+JWT_SECRET=secret
 PORT=8080
 ```
 
