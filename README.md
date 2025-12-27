@@ -47,7 +47,7 @@ O projeto segue os princípios da **Clean Architecture** (Arquitetura Limpa), ga
 ## 🛠️ Tecnologias Utilizadas
 
 *   **Backend**: Go 1.23+
-*   **Frontend**: Next.js 14, React, Tailwind CSS
+*   **Frontend**: Next.js 14, React, Tailwind CSS, Recharts (Gráficos), Sonner (Notificações)
 *   **Banco de Dados**: PostgreSQL
 *   **Autenticação**: JWT (JSON Web Tokens) e BCrypt (Hashing de senhas)
 *   **Ambiente**: Docker (opcional, para rodar o banco)
@@ -95,20 +95,19 @@ Acesse `http://localhost:3000` no seu navegador.
 ## 🔐 Funcionalidades
 
 1.  **Dashboard 50/30/20**: Visualização automática de quanto você já gastou das suas metas de Essenciais, Desejos e Investimentos.
-2.  **Autenticação Completa**: Crie sua conta e faça login. Seus dados são privados.
-3.  **Transações Detalhadas**:
-    *   Adicione Receitas e Despesas.
-    *   Categorização automática.
-    *   Histórico com datas e descrições.
-4.  **Segurança**: Senhas criptografadas e proteção contra acesso não autorizado.
-5.  **Reset**: Opção para limpar seus dados e começar do zero.
+2.  **Gráficos Interativos**: Gráfico de rosca para melhor visualização da distribuição de gastos.
+3.  **CRUD Completo**: Adicione, edite e exclua transações com facilidade.
+4.  **Feedback Visual**: Notificações modernas (Toasts) para todas as ações.
+5.  **Autenticação Completa**: Crie sua conta e faça login. Seus dados são privados e seguros.
+6.  **Filtro por Período**: Navegue entre meses para ver seu histórico.
 
 ---
 
 ## 📝 Próximos Passos (Roadmap)
 
-*   [ ] Edição e Exclusão de transações individuais.
-*   [ ] Gráficos de evolução mensal.
+*   [x] Edição e Exclusão de transações individuais.
+*   [x] Visualização gráfica (Gráfico de Rosca).
 *   [ ] PWA (Instalar no celular).
+*   [ ] Exportação de relatórios (PDF/CSV).
 
 Desenvolvido por Larissa Sthefanny 💜

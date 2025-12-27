@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import TransactionModal from "@/components/TransactionModal";
+import { toast } from "sonner";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import {
   LogOut,
   RotateCcw,
@@ -14,24 +16,44 @@ import {
   ArrowUpCircle,
   ArrowDownCircle,
   PiggyBank,
-  LayoutDashboard
+  LayoutDashboard,
+  ChevronLeft,
+  ChevronRight,
+  Pencil,
+  Trash2
 } from "lucide-react";
+
+interface Transaction {
+  id: number;
+  type: "income" | "expense";
+  amount: number;
+  category: string;
+  description: string;
+  date: string;
+  created_at: string;
+  user_id: number;
+}
 
 export default function Home() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [transactionToEdit, setTransactionToEdit] = useState<Transaction | null>(null);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const token = localStorage.getItem("plena_token");
     if (!token) {
       router.push("/login");
       return;
     }
 
+    const month = currentDate.getMonth() + 1;
+    const year = currentDate.getFullYear();
+
     try {
-      const res = await fetch("http://localhost:8080/api/transactions", {
+      const res = await fetch(`http://localhost:8080/api/transactions?month=${month}&year=${year}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -47,19 +69,59 @@ export default function Home() {
       setTransactions(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Failed to fetch transactions", error);
+      toast.error("Erro ao carregar dados.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentDate, router]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
+
+  const prevMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+  };
+
+  const nextMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  };
+
+  const formatCurrentMonth = (date: Date) => {
+    return date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+  };
+
+  const handleOpenModal = (transaction: Transaction | null = null) => {
+    setTransactionToEdit(transaction);
+    setIsModalOpen(true);
+  }
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+    setTransactionToEdit(null);
     fetchData();
   };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("Tem certeza que deseja excluir esta transação?")) return;
+
+    const token = localStorage.getItem("plena_token");
+    try {
+      const res = await fetch(`http://localhost:8080/api/transactions/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        toast.success("Transação excluída!");
+        fetchData();
+      } else {
+        toast.error("Erro ao excluir.");
+      }
+    } catch (e) {
+      toast.error("Erro de conexão.");
+    }
+  }
 
   const handleReset = async () => {
     if (!confirm("Tem certeza que deseja apagar todas as transações? Isso não pode ser desfeito.")) {
@@ -78,9 +140,10 @@ export default function Home() {
         }
       });
       setTransactions([]);
+      toast.success("Dados resetados!");
     } catch (error) {
       console.error("Failed to reset data", error);
-      alert("Erro ao resetar dados");
+      toast.error("Erro ao resetar dados");
     } finally {
       setLoading(false);
     }
@@ -127,13 +190,18 @@ export default function Home() {
     return Math.min(percentage, 100);
   };
 
+  const chartData = [
+    { name: 'Essenciais', value: needsActual, color: '#3b82f6' },
+    { name: 'Desejos', value: wantsActual, color: '#a855f7' },
+    { name: 'Investimentos', value: savingsActual, color: '#10b981' }
+  ].filter(d => d.value > 0);
+
   return (
     <main className="min-h-screen bg-[#0A0A0A] text-white p-6 sm:p-8 font-sans selection:bg-purple-500/30">
-      <TransactionModal isOpen={isModalOpen} onClose={handleModalClose} />
+      <TransactionModal isOpen={isModalOpen} onClose={handleModalClose} transactionToEdit={transactionToEdit} />
 
       <div className="max-w-5xl mx-auto space-y-8">
 
-        {/* Header */}
         <header className="flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl shadow-lg shadow-purple-900/20">
@@ -144,6 +212,18 @@ export default function Home() {
                 Plena
               </h1>
               <p className="text-xs text-gray-500 font-medium tracking-wide">FINANÇAS PESSOAIS</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 bg-zinc-900/80 border border-zinc-800 rounded-full p-1 pl-4 pr-1">
+            <span className="text-sm font-medium text-zinc-300 capitalize">{formatCurrentMonth(currentDate)}</span>
+            <div className="flex gap-1">
+              <button onClick={prevMonth} className="p-1.5 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button onClick={nextMonth} className="p-1.5 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors">
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
@@ -164,7 +244,7 @@ export default function Home() {
             </button>
             <div className="w-px h-8 bg-zinc-800 mx-1"></div>
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => handleOpenModal()}
               className="flex items-center gap-2 px-5 py-2.5 bg-white text-black hover:bg-gray-200 rounded-full text-sm font-semibold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95"
             >
               <Plus className="w-4 h-4" />
@@ -173,7 +253,6 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Main Stats */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-8 rounded-3xl bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800/50 shadow-2xl relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-32 bg-purple-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
@@ -303,11 +382,50 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Chart Section */}
+        <section>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-semibold text-zinc-200">Distribuição de Gastos</h3>
+          </div>
+          <div className="p-4 rounded-3xl bg-[#111] border border-zinc-800 flex items-center justify-center relative min-h-[300px]">
+            {chartData.length > 0 ? (
+              <div className="w-full h-64 relative">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={chartData}
+                      innerRadius={60}
+                      outerRadius={80}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{ borderRadius: '12px', border: 'none', backgroundColor: '#333', color: '#fff' }}
+                      itemStyle={{ color: '#fff' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="text-center">
+                    <p className="text-xs font-medium text-zinc-500 uppercase">Total Despesas</p>
+                    <p className="text-xl font-bold text-white">{formatCurrency(totalExpenses)}</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-zinc-600 text-sm">Sem dados visuais</div>
+            )}
+          </div>
+        </section>
+
         {/* Transactions */}
         <section>
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-semibold text-zinc-200">Últimas Transações</h3>
-            <button className="text-xs text-zinc-500 hover:text-white transition-colors">Ver todas</button>
           </div>
 
           <div className="space-y-3">
@@ -330,9 +448,21 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
-                <span className={`font-semibold ${item.type === 'income' ? 'text-emerald-400' : 'text-zinc-300'}`}>
-                  {item.type === 'income' ? '+' : '-'} {formatCurrency(item.amount)}
-                </span>
+
+                <div className="flex items-center gap-4">
+                  <span className={`font-semibold ${item.type === 'income' ? 'text-emerald-400' : 'text-zinc-300'}`}>
+                    {item.type === 'income' ? '+' : '-'} {formatCurrency(item.amount)}
+                  </span>
+
+                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => handleOpenModal(item)} className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-full transition-colors">
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => handleDelete(item.id)} className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-colors">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
               </div>
             ))}
 
@@ -342,7 +472,7 @@ export default function Home() {
                   <Wallet className="w-6 h-6" />
                 </div>
                 <p className="text-zinc-400 font-medium">Nenhuma transação ainda</p>
-                <p className="text-zinc-600 text-sm mt-1">Clique em "Nova" para começar</p>
+                <p className="text-zinc-600 text-sm mt-1">Clique em &quot;Nova&quot; para começar</p>
               </div>
             )}
           </div>

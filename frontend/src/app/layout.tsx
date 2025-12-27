@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "Gerencie suas finanças com o método 50/30/20",
 };
 
+import { Toaster } from 'sonner';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,6 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <Toaster richColors position="top-right" theme="dark" />
       </body>
     </html>
   );

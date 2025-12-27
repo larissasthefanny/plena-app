@@ -21,13 +21,23 @@ func (m *MockTransactionRepository) Save(transaction domain.Transaction) (int, e
 	return args.Int(0), args.Error(1)
 }
 
-func (m *MockTransactionRepository) ListByUserID(userID int) ([]domain.Transaction, error) {
-	args := m.Called(userID)
+func (m *MockTransactionRepository) ListByUserID(userID, month, year int) ([]domain.Transaction, error) {
+	args := m.Called(userID, month, year)
 	return args.Get(0).([]domain.Transaction), args.Error(1)
 }
 
 func (m *MockTransactionRepository) DeleteAllByUserID(userID int) error {
 	args := m.Called(userID)
+	return args.Error(0)
+}
+
+func (m *MockTransactionRepository) Update(transaction domain.Transaction) error {
+	args := m.Called(transaction)
+	return args.Error(0)
+}
+
+func (m *MockTransactionRepository) Delete(id, userID int) error {
+	args := m.Called(id, userID)
 	return args.Error(0)
 }
 
@@ -86,15 +96,17 @@ func TestListTransactions_Success(t *testing.T) {
 	mockRepo := new(MockTransactionRepository)
 	service := services.NewTransactionService(mockRepo)
 	userID := 1
+	month := 12
+	year := 2025
 
 	expectedTransactions := []domain.Transaction{
 		{ID: 1, Type: "income", Amount: 1000},
 		{ID: 2, Type: "expense", Amount: 200},
 	}
 
-	mockRepo.On("ListByUserID", userID).Return(expectedTransactions, nil)
+	mockRepo.On("ListByUserID", userID, month, year).Return(expectedTransactions, nil)
 
-	result, err := service.ListTransactions(userID)
+	result, err := service.ListTransactions(userID, month, year)
 
 	assert.NoError(t, err)
 	assert.Len(t, result, 2)
@@ -105,10 +117,12 @@ func TestListTransactions_Error(t *testing.T) {
 	mockRepo := new(MockTransactionRepository)
 	service := services.NewTransactionService(mockRepo)
 	userID := 1
+	month := 1
+	year := 2025
 
-	mockRepo.On("ListByUserID", userID).Return([]domain.Transaction(nil), errors.New("db error"))
+	mockRepo.On("ListByUserID", userID, month, year).Return([]domain.Transaction(nil), errors.New("db error"))
 
-	_, err := service.ListTransactions(userID)
+	_, err := service.ListTransactions(userID, month, year)
 
 	assert.Error(t, err)
 	assert.EqualError(t, err, "db error")

@@ -51,14 +51,46 @@ func (r *PostgresTransactionRepository) Save(t domain.Transaction) (int, error) 
 	return id, nil
 }
 
-func (r *PostgresTransactionRepository) ListByUserID(userID int) ([]domain.Transaction, error) {
+func (r *PostgresTransactionRepository) Update(t domain.Transaction) error {
+	query := `
+		UPDATE transactions 
+		SET amount = $1, category = $2, description = $3, date = $4, type = $5
+		WHERE id = $6 AND user_id = $7
+	`
+	result, err := r.db.Exec(query, t.Amount, t.Category, t.Description, t.Date, t.Type, t.ID, t.UserID)
+	if err != nil {
+		return err
+	}
+	rows, _ := result.RowsAffected()
+	if rows == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
+}
+
+func (r *PostgresTransactionRepository) Delete(id, userID int) error {
+	query := `DELETE FROM transactions WHERE id = $1 AND user_id = $2`
+	result, err := r.db.Exec(query, id, userID)
+	if err != nil {
+		return err
+	}
+	rows, _ := result.RowsAffected()
+	if rows == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
+}
+
+func (r *PostgresTransactionRepository) ListByUserID(userID, month, year int) ([]domain.Transaction, error) {
 	query := `
 		SELECT id, user_id, type, amount, category, COALESCE(description, ''), date, created_at
 		FROM transactions
-		WHERE user_id = $1
+		WHERE user_id = $1 
+		AND EXTRACT(MONTH FROM date) = $2 
+		AND EXTRACT(YEAR FROM date) = $3
 		ORDER BY date DESC
 	`
-	rows, err := r.db.Query(query, userID)
+	rows, err := r.db.Query(query, userID, month, year)
 	if err != nil {
 		return nil, err
 	}

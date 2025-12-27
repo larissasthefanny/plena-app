@@ -61,8 +61,28 @@ func (s *TransactionService) CreateExpense(userID int, amount float64, category,
 	return transaction, nil
 }
 
-func (s *TransactionService) ListTransactions(userID int) ([]domain.Transaction, error) {
-	return s.repo.ListByUserID(userID)
+func (s *TransactionService) UpdateTransaction(userID, id int, amount float64, category, description string, date time.Time, typeStr string) error {
+	if date.IsZero() {
+		date = time.Now()
+	}
+	t := domain.Transaction{
+		ID:          id,
+		UserID:      userID,
+		Amount:      amount,
+		Category:    category,
+		Description: description,
+		Date:        date,
+		Type:        typeStr,
+	}
+	return s.repo.Update(t)
+}
+
+func (s *TransactionService) DeleteTransaction(userID, id int) error {
+	return s.repo.Delete(id, userID)
+}
+
+func (s *TransactionService) ListTransactions(userID, month, year int) ([]domain.Transaction, error) {
+	return s.repo.ListByUserID(userID, month, year)
 }
 
 func (s *TransactionService) ResetData(userID int) error {
