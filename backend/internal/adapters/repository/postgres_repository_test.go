@@ -47,6 +47,11 @@ func TestPostgresTransactionRepository_Integration(t *testing.T) {
 	defer func() {
 		repo.DeleteAllByUserID(testUserID)
 	}()
+
+	now := time.Now()
+	currentMonth := int(now.Month())
+	currentYear := now.Year()
+
 	t.Run("Save Transaction", func(t *testing.T) {
 		tr := domain.Transaction{
 			UserID:      testUserID,
@@ -54,7 +59,7 @@ func TestPostgresTransactionRepository_Integration(t *testing.T) {
 			Amount:      100.50,
 			Category:    "TestCat",
 			Description: "Test Desc",
-			Date:        time.Now(),
+			Date:        now,
 		}
 
 		id, err := repo.Save(tr)
@@ -62,29 +67,34 @@ func TestPostgresTransactionRepository_Integration(t *testing.T) {
 		assert.Greater(t, id, 0)
 	})
 
-	t.Run("List Transactions", func(t *testing.T) {
+	t.Run("List Transactions Current Month", func(t *testing.T) {
 		tr2 := domain.Transaction{
 			UserID:      testUserID,
 			Type:        "expense",
 			Amount:      50.00,
 			Category:    "TestCat2",
 			Description: "Test Desc 2",
-			Date:        time.Now(),
+			Date:        now,
 		}
 		repo.Save(tr2)
 
-		list, err := repo.ListByUserID(testUserID)
+		list, err := repo.ListByUserID(testUserID, currentMonth, currentYear)
 		assert.NoError(t, err)
 		assert.Len(t, list, 2)
+	})
 
-		assert.Equal(t, "expense", list[0].Type)
+	t.Run("List Transactions Wrong Month", func(t *testing.T) {
+		// Should return empty for next month
+		list, err := repo.ListByUserID(testUserID, currentMonth+1, currentYear)
+		assert.NoError(t, err)
+		assert.Len(t, list, 0)
 	})
 
 	t.Run("Delete All", func(t *testing.T) {
 		err := repo.DeleteAllByUserID(testUserID)
 		assert.NoError(t, err)
 
-		list, err := repo.ListByUserID(testUserID)
+		list, err := repo.ListByUserID(testUserID, currentMonth, currentYear)
 		assert.NoError(t, err)
 		assert.Len(t, list, 0)
 	})

@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/larissasthefanny/plena-app/backend/internal/core/domain"
 	"github.com/larissasthefanny/plena-app/backend/internal/core/services"
@@ -69,8 +70,9 @@ func TestLogin_Success(t *testing.T) {
 
 	email := "test@example.com"
 	password := "password123"
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 
-	mockRepo.On("GetByEmail", email).Return(domain.User{ID: 1, Email: email}, nil)
+	mockRepo.On("GetByEmail", email).Return(domain.User{ID: 1, Email: email, Password: string(hashedPassword)}, nil)
 
 	token, err := service.Login(email, password)
 

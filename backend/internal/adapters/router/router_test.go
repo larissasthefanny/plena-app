@@ -32,10 +32,14 @@ func (m *MockTransService) CreateIncome(userID int, amount float64, c, d string,
 func (m *MockTransService) CreateExpense(userID int, amount float64, c, d string, t time.Time) (domain.Transaction, error) {
 	return domain.Transaction{}, nil
 }
-func (m *MockTransService) ListTransactions(userID int) ([]domain.Transaction, error) {
+func (m *MockTransService) ListTransactions(userID, month, year int) ([]domain.Transaction, error) {
 	return []domain.Transaction{}, nil
 }
 func (m *MockTransService) ResetData(userID int) error { return nil }
+func (m *MockTransService) UpdateTransaction(userID, id int, amount float64, category, description string, date time.Time, typeStr string) error {
+	return nil
+}
+func (m *MockTransService) DeleteTransaction(userID, id int) error { return nil }
 
 func TestRouter_HealthCheck(t *testing.T) {
 	tc := controllers.NewTransactionController(&MockTransService{})

@@ -30,6 +30,9 @@ func (router *Router) Setup() http.Handler {
 	mux.HandleFunc("/api/transactions", controllers.AuthMiddleware(router.transController.ListTransactions))
 	mux.HandleFunc("/api/reset", controllers.AuthMiddleware(router.transController.ResetData))
 
+	mux.HandleFunc("DELETE /api/transactions/{id}", controllers.AuthMiddleware(router.transController.DeleteTransaction))
+	mux.HandleFunc("PUT /api/transactions/{id}", controllers.AuthMiddleware(router.transController.UpdateTransaction))
+
 	return router.enableCORS(mux)
 }
 

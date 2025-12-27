@@ -29,13 +29,23 @@ func (m *MockTransactionService) CreateExpense(userID int, amount float64, categ
 	return args.Get(0).(domain.Transaction), args.Error(1)
 }
 
-func (m *MockTransactionService) ListTransactions(userID int) ([]domain.Transaction, error) {
-	args := m.Called(userID)
+func (m *MockTransactionService) ListTransactions(userID, month, year int) ([]domain.Transaction, error) {
+	args := m.Called(userID, month, year)
 	return args.Get(0).([]domain.Transaction), args.Error(1)
 }
 
 func (m *MockTransactionService) ResetData(userID int) error {
 	args := m.Called(userID)
+	return args.Error(0)
+}
+
+func (m *MockTransactionService) UpdateTransaction(userID, id int, amount float64, category, description string, date time.Time, typeStr string) error {
+	args := m.Called(userID, id, amount, category, description, date, typeStr)
+	return args.Error(0)
+}
+
+func (m *MockTransactionService) DeleteTransaction(userID, id int) error {
+	args := m.Called(userID, id)
 	return args.Error(0)
 }
 

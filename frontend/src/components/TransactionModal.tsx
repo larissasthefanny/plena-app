@@ -1,13 +1,23 @@
-"use client";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
-import { useState } from "react";
+interface Transaction {
+    id: number;
+    type: "income" | "expense";
+    amount: number;
+    category: string;
+    description: string;
+    date: string;
+}
 
 export default function TransactionModal({
     isOpen,
     onClose,
+    transactionToEdit
 }: {
     isOpen: boolean;
     onClose: () => void;
+    transactionToEdit?: Transaction | null;
 }) {
     const [type, setType] = useState<"income" | "expense">("income");
     const [amount, setAmount] = useState("");
@@ -16,23 +26,46 @@ export default function TransactionModal({
     const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
     const [isLoading, setIsLoading] = useState(false);
 
+    useEffect(() => {
+        if (transactionToEdit) {
+            setType(transactionToEdit.type);
+            setAmount(transactionToEdit.amount.toString());
+            setCategory(transactionToEdit.category);
+            setDescription(transactionToEdit.description);
+            const d = new Date(transactionToEdit.date);
+            setDate(d.toISOString().split("T")[0]);
+        } else {
+            setType("income");
+            setAmount("");
+            setCategory("Salário");
+            setDescription("");
+            setDate(new Date().toISOString().split("T")[0]);
+        }
+    }, [transactionToEdit, isOpen]);
+
     if (!isOpen) return null;
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setIsLoading(true);
 
-        const endpoint = type === "income" ? "/api/income" : "/api/expense";
+        const isEditing = !!transactionToEdit;
+        const endpoint = isEditing
+            ? `/api/transactions/${transactionToEdit.id}`
+            : (type === "income" ? "/api/income" : "/api/expense");
+
+        const method = isEditing ? "PUT" : "POST";
 
         try {
             const token = localStorage.getItem("plena_token");
             const res = await fetch(`http://localhost:8080${endpoint}`, {
-                method: "POST",
+                method: method,
                 body: JSON.stringify({
                     amount: parseFloat(amount),
                     category,
                     description,
                     date: new Date(date).toISOString(),
+                    type // Needed for PUT, ignored for POST endpoints usually unless universal
                 }),
                 headers: {
                     "Content-Type": "application/json",
@@ -41,15 +74,16 @@ export default function TransactionModal({
             });
 
             if (res.ok) {
+                toast.success(isEditing ? "Transação atualizada!" : "Transação adicionada!");
                 onClose();
                 setAmount("");
                 setDescription("");
             } else {
-                alert("Erro ao adicionar transação.");
+                toast.error("Erro ao salvar transação.");
             }
         } catch (error) {
             console.error(error);
-            alert("Erro ao conectar com o servidor.");
+            toast.error("Erro de conexão.");
         } finally {
             setIsLoading(false);
         }
@@ -59,7 +93,9 @@ export default function TransactionModal({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
             <div className="w-full max-w-md rounded-2xl bg-zinc-900 border border-zinc-800 p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
                 <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-semibold text-white">Nova Transação</h3>
+                    <h3 className="text-xl font-semibold text-white">
+                        {transactionToEdit ? "Editar Transação" : "Nova Transação"}
+                    </h3>
                     <button
                         onClick={onClose}
                         className="text-zinc-400 hover:text-white"
@@ -72,14 +108,14 @@ export default function TransactionModal({
                     <div className="flex gap-2 p-1 bg-zinc-800 rounded-lg">
                         <button
                             type="button"
-                            onClick={() => { setType("income"); setCategory("Salário"); }}
+                            onClick={() => { setType("income"); if (!transactionToEdit) setCategory("Salário"); }}
                             className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${type === "income" ? "bg-green-600 text-white shadow-lg" : "text-zinc-400 hover:text-white"}`}
                         >
                             Receita
                         </button>
                         <button
                             type="button"
-                            onClick={() => { setType("expense"); setCategory("Essenciais"); }}
+                            onClick={() => { setType("expense"); if (!transactionToEdit) setCategory("Essenciais"); }}
                             className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${type === "expense" ? "bg-red-600 text-white shadow-lg" : "text-zinc-400 hover:text-white"}`}
                         >
                             Despesa
@@ -162,7 +198,7 @@ export default function TransactionModal({
                         disabled={isLoading}
                         className={`w-full mt-4 text-white font-medium py-3 rounded-lg transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${type === "income" ? "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500" : "bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500"}`}
                     >
-                        {isLoading ? "Salvando..." : type === "income" ? "Adicionar Receita" : "Adicionar Despesa"}
+                        {isLoading ? "Salvando..." : (!!transactionToEdit ? "Atualizar" : (type === "income" ? "Adicionar Receita" : "Adicionar Despesa"))}
                     </button>
                 </form>
             </div>
