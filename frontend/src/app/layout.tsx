@@ -35,7 +35,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-import { Toaster } from 'sonner';
+
 
 export default function RootLayout({
   children,
