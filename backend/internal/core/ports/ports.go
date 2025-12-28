@@ -32,3 +32,20 @@ type AuthService interface {
 	Register(email, password string) (string, error)
 	Login(email, password string) (string, error)
 }
+
+type GoalRepository interface {
+	Save(goal domain.Goal) (int, error)
+	Update(goal domain.Goal) error
+	Delete(id, userID int) error
+	ListByUserID(userID int) ([]domain.Goal, error)
+	GetByID(id, userID int) (domain.Goal, error)
+	AddProgress(id, userID int, amount float64) error
+}
+
+type GoalService interface {
+	CreateGoal(userID int, name string, targetAmount float64, deadline time.Time) (domain.Goal, error)
+	UpdateGoal(userID, id int, name string, targetAmount float64, deadline time.Time) error
+	DeleteGoal(userID, id int) error
+	ListGoals(userID int) ([]domain.Goal, error)
+	AddProgress(userID, goalID int, amount float64) error
+}

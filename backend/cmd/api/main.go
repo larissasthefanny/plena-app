@@ -30,14 +30,17 @@ func main() {
 
 	transactionRepo := repository.NewPostgresTransactionRepository(dbConnection)
 	userRepo := repository.NewPostgresUserRepository(dbConnection)
+	goalRepo := repository.NewPostgresGoalRepository(dbConnection)
 
 	transactionService := services.NewTransactionService(transactionRepo)
 	authService := services.NewAuthService(userRepo, cfg.JWTSecret)
+	goalService := services.NewGoalService(goalRepo)
 
 	transController := controllers.NewTransactionController(transactionService)
 	authController := controllers.NewAuthController(authService)
+	goalController := controllers.NewGoalController(goalService)
 
-	appRouter := router.NewRouter(transController, authController)
+	appRouter := router.NewRouter(transController, authController, goalController)
 	handler := appRouter.Setup()
 
 	log.Printf("Server starting on port %s...", cfg.Port)

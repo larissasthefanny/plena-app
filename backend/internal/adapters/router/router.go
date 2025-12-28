@@ -9,12 +9,14 @@ import (
 type Router struct {
 	transController *controllers.TransactionController
 	authController  *controllers.AuthController
+	goalController  *controllers.GoalController
 }
 
-func NewRouter(tc *controllers.TransactionController, ac *controllers.AuthController) *Router {
+func NewRouter(tc *controllers.TransactionController, ac *controllers.AuthController, gc *controllers.GoalController) *Router {
 	return &Router{
 		transController: tc,
 		authController:  ac,
+		goalController:  gc,
 	}
 }
 
@@ -32,6 +34,13 @@ func (router *Router) Setup() http.Handler {
 
 	mux.HandleFunc("DELETE /api/transactions/{id}", controllers.AuthMiddleware(router.transController.DeleteTransaction))
 	mux.HandleFunc("PUT /api/transactions/{id}", controllers.AuthMiddleware(router.transController.UpdateTransaction))
+
+	// Goal routes
+	mux.HandleFunc("POST /api/goals", controllers.AuthMiddleware(router.goalController.CreateGoal))
+	mux.HandleFunc("GET /api/goals", controllers.AuthMiddleware(router.goalController.ListGoals))
+	mux.HandleFunc("PUT /api/goals/{id}", controllers.AuthMiddleware(router.goalController.UpdateGoal))
+	mux.HandleFunc("DELETE /api/goals/{id}", controllers.AuthMiddleware(router.goalController.DeleteGoal))
+	mux.HandleFunc("POST /api/goals/{id}/progress", controllers.AuthMiddleware(router.goalController.AddProgress))
 
 	return router.enableCORS(mux)
 }

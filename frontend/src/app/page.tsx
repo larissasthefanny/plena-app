@@ -21,9 +21,12 @@ import {
   ChevronRight,
   Pencil,
   Trash2,
-  Info
+  Info,
+  Target
 } from "lucide-react";
 import MethodInfoModal from "@/components/MethodInfoModal";
+import GoalModal from "@/components/GoalModal";
+import GoalCard from "@/components/GoalCard";
 
 interface Transaction {
   id: number;
@@ -36,12 +39,23 @@ interface Transaction {
   user_id: number;
 }
 
+interface Goal {
+  id: number;
+  name: string;
+  target_amount: number;
+  current_amount: number;
+  deadline: string;
+}
+
 export default function Home() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
   const [transactionToEdit, setTransactionToEdit] = useState<any | null>(null);
+  const [goalToEdit, setGoalToEdit] = useState<Goal | null>(null);
   const [transactions, setTransactions] = useState<any[]>([]);
+  const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -78,9 +92,28 @@ export default function Home() {
     }
   }, [currentDate, router]);
 
+  const fetchGoals = useCallback(async () => {
+    const token = localStorage.getItem("plena_token");
+    if (!token) return;
+
+    try {
+      const res = await fetch("http://localhost:8080/api/goals", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setGoals(Array.isArray(data) ? data : []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch goals", error);
+    }
+  }, []);
+
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    fetchGoals();
+  }, [fetchData, fetchGoals]);
 
   const prevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -121,7 +154,62 @@ export default function Home() {
       } else {
         toast.error("Erro ao excluir.");
       }
-    } catch (e) {
+    } catch {
+      toast.error("Erro de conexão.");
+    }
+  }
+
+  const handleOpenGoalModal = (goal: Goal | null = null) => {
+    setGoalToEdit(goal);
+    setIsGoalModalOpen(true);
+  }
+
+  const handleGoalModalClose = () => {
+    setIsGoalModalOpen(false);
+    setGoalToEdit(null);
+    fetchGoals();
+  };
+
+  const handleDeleteGoal = async (id: number) => {
+    if (!confirm("Tem certeza que deseja excluir esta meta?")) return;
+
+    const token = localStorage.getItem("plena_token");
+    try {
+      const res = await fetch(`http://localhost:8080/api/goals/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        toast.success("Meta excluída!");
+        fetchGoals();
+      } else {
+        toast.error("Erro ao excluir meta.");
+      }
+    } catch {
+      toast.error("Erro de conexão.");
+    }
+  }
+
+  const handleAddProgress = async (id: number, amount: number) => {
+    const token = localStorage.getItem("plena_token");
+    try {
+      const res = await fetch(`http://localhost:8080/api/goals/${id}/progress`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ amount })
+      });
+
+      if (res.ok) {
+        toast.success("Progresso adicionado!");
+        fetchGoals();
+      } else {
+        toast.error("Erro ao adicionar progresso.");
+      }
+    } catch {
       toast.error("Erro de conexão.");
     }
   }
@@ -203,6 +291,7 @@ export default function Home() {
     <main className="min-h-screen bg-[#0A0A0A] text-white p-6 sm:p-8 font-sans selection:bg-purple-500/30">
       <TransactionModal isOpen={isModalOpen} onClose={handleModalClose} transactionToEdit={transactionToEdit} />
       <MethodInfoModal isOpen={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)} />
+      <GoalModal isOpen={isGoalModalOpen} onClose={handleGoalModalClose} goalToEdit={goalToEdit} />
 
       <div className="max-w-5xl mx-auto space-y-8">
 
@@ -431,6 +520,45 @@ export default function Home() {
               <div className="text-zinc-600 text-sm">Sem dados visuais</div>
             )}
           </div>
+        </section>
+
+        {/* Goals Section */}
+        <section>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-semibold text-zinc-200 flex items-center gap-2">
+              <Target className="w-5 h-5 text-purple-500" />
+              Minhas Metas
+            </h3>
+            <button
+              onClick={() => handleOpenGoalModal()}
+              className="flex items-center gap-2 px-4 py-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 rounded-full text-sm font-semibold transition-all border border-purple-500/20"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Nova Meta</span>
+            </button>
+          </div>
+
+          {goals.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {goals.map((goal) => (
+                <GoalCard
+                  key={goal.id}
+                  goal={goal}
+                  onEdit={handleOpenGoalModal}
+                  onDelete={handleDeleteGoal}
+                  onAddProgress={handleAddProgress}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 border border-dashed border-zinc-800 rounded-3xl bg-zinc-900/20">
+              <div className="inline-flex items-center justify-center p-4 bg-zinc-800 rounded-full mb-4 text-zinc-500">
+                <Target className="w-6 h-6" />
+              </div>
+              <p className="text-zinc-400 font-medium">Nenhuma meta ainda</p>
+              <p className="text-zinc-600 text-sm mt-1">Crie sua primeira meta financeira</p>
+            </div>
+          )}
         </section>
 
         {/* Transactions */}
