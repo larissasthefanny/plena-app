@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -38,8 +37,12 @@ export default function RegisterPage() {
             const data = await res.json();
             localStorage.setItem("plena_token", data.token);
             router.push("/");
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro desconhecido");
+            }
         } finally {
             setLoading(false);
         }

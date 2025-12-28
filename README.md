@@ -47,7 +47,7 @@ O projeto segue os princípios da **Clean Architecture** (Arquitetura Limpa), ga
 ## 🛠️ Tecnologias Utilizadas
 
 *   **Backend**: Go 1.23+
-*   **Frontend**: Next.js 14, React, Tailwind CSS
+*   **Frontend**: Next.js 14, React, Tailwind CSS, Recharts (Gráficos), Sonner (Notificações)
 *   **Banco de Dados**: PostgreSQL
 *   **Autenticação**: JWT (JSON Web Tokens) e BCrypt (Hashing de senhas)
 *   **Ambiente**: Docker (opcional, para rodar o banco)
@@ -67,10 +67,10 @@ No diretório `backend/`, crie um arquivo `.env` baseado no `.env.example`:
 ```env
 DB_HOST=localhost
 DB_PORT=5432
-DB_USER=plena_user
-DB_PASSWORD=plena_password
+DB_USER=user
+DB_PASSWORD=password
 DB_NAME=plena_db
-JWT_SECRET=sua_chave_secreta_super_segura
+JWT_SECRET=secret
 PORT=8080
 ```
 
@@ -95,13 +95,11 @@ Acesse `http://localhost:3000` no seu navegador.
 ## 🔐 Funcionalidades
 
 1.  **Dashboard 50/30/20**: Visualização automática de quanto você já gastou das suas metas de Essenciais, Desejos e Investimentos.
-2.  **Autenticação Completa**: Crie sua conta e faça login. Seus dados são privados.
-3.  **Transações Detalhadas**:
-    *   Adicione Receitas e Despesas.
-    *   Categorização automática.
-    *   Histórico com datas e descrições.
-4.  **Segurança**: Senhas criptografadas e proteção contra acesso não autorizado.
-5.  **Reset**: Opção para limpar seus dados e começar do zero.
+2.  **Gráficos Interativos**: Gráfico de rosca para melhor visualização da distribuição de gastos.
+3.  **CRUD Completo**: Adicione, edite e exclua transações com facilidade.
+4.  **Feedback Visual**: Notificações modernas (Toasts) para todas as ações.
+5.  **Autenticação Completa**: Crie sua conta e faça login. Seus dados são privados e seguros.
+6.  **Filtro por Período**: Navegue entre meses para ver seu histórico.
 
 6.  **Filtro por Período**: Navegue entre meses para ver seu histórico.
 7.  **PWA (Instalável)**: Instale o app no seu celular ou computador para acesso rápido e offline.
