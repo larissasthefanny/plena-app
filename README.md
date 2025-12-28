@@ -103,12 +103,17 @@ Acesse `http://localhost:3000` no seu navegador.
 4.  **Segurança**: Senhas criptografadas e proteção contra acesso não autorizado.
 5.  **Reset**: Opção para limpar seus dados e começar do zero.
 
+6.  **Filtro por Período**: Navegue entre meses para ver seu histórico.
+7.  **PWA (Instalável)**: Instale o app no seu celular ou computador para acesso rápido e offline.
+8.  **Guia do Método**: Explicação interativa do método 50/30/20 integrada ao dashboard.
+
 ---
 
 ## 📝 Próximos Passos (Roadmap)
 
-*   [ ] Edição e Exclusão de transações individuais.
-*   [ ] Gráficos de evolução mensal.
-*   [ ] PWA (Instalar no celular).
+*   [x] Edição e Exclusão de transações individuais.
+*   [x] Visualização gráfica (Gráfico de Rosca).
+*   [x] PWA (Instalar no celular).
+*   [ ] Exportação de relatórios (PDF/CSV).
 
 Desenvolvido por Larissa Sthefanny 💜

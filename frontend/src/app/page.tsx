@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import TransactionModal from "@/components/TransactionModal";
+import { toast } from "sonner";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import {
   LogOut,
   RotateCcw,
@@ -14,12 +16,20 @@ import {
   ArrowUpCircle,
   ArrowDownCircle,
   PiggyBank,
-  LayoutDashboard
+  LayoutDashboard,
+  ChevronLeft,
+  ChevronRight,
+  Pencil,
+  Trash2,
+  Info
 } from "lucide-react";
+import MethodInfoModal from "@/components/MethodInfoModal";
 
 export default function Home() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [transactionToEdit, setTransactionToEdit] = useState<any | null>(null);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -129,7 +139,8 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#0A0A0A] text-white p-6 sm:p-8 font-sans selection:bg-purple-500/30">
-      <TransactionModal isOpen={isModalOpen} onClose={handleModalClose} />
+      <TransactionModal isOpen={isModalOpen} onClose={handleModalClose} transactionToEdit={transactionToEdit} />
+      <MethodInfoModal isOpen={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)} />
 
       <div className="max-w-5xl mx-auto space-y-8">
 
@@ -217,6 +228,13 @@ export default function Home() {
               <TrendingUp className="w-5 h-5 text-purple-500" />
               Método 50/30/20
             </h3>
+            <button
+              onClick={() => setIsInfoModalOpen(true)}
+              className="p-2.5 text-zinc-500 hover:text-purple-400 hover:bg-purple-500/10 rounded-full transition-colors"
+              title="O que é isso?"
+            >
+              <Info className="w-6 h-6" />
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
