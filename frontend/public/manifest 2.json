@@ -1,0 +1,17 @@
+{
+    "name": "Plena - Finanças Pessoais",
+    "short_name": "Plena",
+    "description": "Gerencie suas finanças com o método 50/30/20",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0a0a0a",
+    "theme_color": "#a855f7",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/icons/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}

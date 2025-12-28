@@ -41,11 +41,28 @@ func (m *MockTransService) UpdateTransaction(userID, id int, amount float64, cat
 }
 func (m *MockTransService) DeleteTransaction(userID, id int) error { return nil }
 
+type MockGoalService struct {
+	mock.Mock
+}
+
+func (m *MockGoalService) CreateGoal(userID int, name string, targetAmount float64, deadline time.Time) (domain.Goal, error) {
+	return domain.Goal{}, nil
+}
+func (m *MockGoalService) UpdateGoal(userID, id int, name string, targetAmount float64, deadline time.Time) error {
+	return nil
+}
+func (m *MockGoalService) DeleteGoal(userID, id int) error { return nil }
+func (m *MockGoalService) ListGoals(userID int) ([]domain.Goal, error) {
+	return []domain.Goal{}, nil
+}
+func (m *MockGoalService) AddProgress(userID, goalID int, amount float64) error { return nil }
+
 func TestRouter_HealthCheck(t *testing.T) {
 	tc := controllers.NewTransactionController(&MockTransService{})
 	ac := controllers.NewAuthController(&MockAuthService{})
+	gc := controllers.NewGoalController(&MockGoalService{})
 
-	r := router.NewRouter(tc, ac)
+	r := router.NewRouter(tc, ac, gc)
 	handler := r.Setup()
 
 	req := httptest.NewRequest("GET", "/api/health", nil)
@@ -62,8 +79,9 @@ func TestRouter_AuthMiddleware_BlocksRequest(t *testing.T) {
 
 	tc := controllers.NewTransactionController(&MockTransService{})
 	ac := controllers.NewAuthController(&MockAuthService{})
+	gc := controllers.NewGoalController(&MockGoalService{})
 
-	r := router.NewRouter(tc, ac)
+	r := router.NewRouter(tc, ac, gc)
 	handler := r.Setup()
 
 	req := httptest.NewRequest("GET", "/api/transactions", nil)
