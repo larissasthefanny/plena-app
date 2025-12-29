@@ -70,7 +70,7 @@ export default function Home() {
     const year = currentDate.getFullYear();
 
     try {
-      const res = await fetch(`http://localhost:8080/api/transactions?month=${month}&year=${year}`, {
+      const res = await fetch(`http://${window.location.hostname}:8080/api/transactions?month=${month}&year=${year}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -97,7 +97,7 @@ export default function Home() {
     if (!token) return;
 
     try {
-      const res = await fetch("http://localhost:8080/api/goals", {
+      const res = await fetch(`http://${window.location.hostname}:8080/api/goals`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
 
@@ -143,7 +143,7 @@ export default function Home() {
 
     const token = localStorage.getItem("plena_token");
     try {
-      const res = await fetch(`http://localhost:8080/api/transactions/${id}`, {
+      const res = await fetch(`http://${window.location.hostname}:8080/api/transactions/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -175,7 +175,7 @@ export default function Home() {
 
     const token = localStorage.getItem("plena_token");
     try {
-      const res = await fetch(`http://localhost:8080/api/goals/${id}`, {
+      const res = await fetch(`http://${window.location.hostname}:8080/api/goals/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -194,7 +194,7 @@ export default function Home() {
   const handleAddProgress = async (id: number, amount: number) => {
     const token = localStorage.getItem("plena_token");
     try {
-      const res = await fetch(`http://localhost:8080/api/goals/${id}/progress`, {
+      const res = await fetch(`http://${window.location.hostname}:8080/api/goals/${id}/progress`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -224,7 +224,7 @@ export default function Home() {
 
     try {
       setLoading(true);
-      await fetch("http://localhost:8080/api/reset", {
+      await fetch(`http://${window.location.hostname}:8080/api/reset`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -295,8 +295,8 @@ export default function Home() {
 
       <div className="max-w-5xl mx-auto space-y-8">
 
-        <header className="flex items-center justify-between py-4">
-          <div className="flex items-center gap-3">
+        <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 py-4">
+          <div className="flex items-center gap-3 w-full md:w-auto">
             <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl shadow-lg shadow-purple-900/20">
               <LayoutDashboard className="w-6 h-6 text-white" />
             </div>
@@ -308,41 +308,43 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 bg-zinc-900/80 border border-zinc-800 rounded-full p-1 pl-4 pr-1">
-            <span className="text-sm font-medium text-zinc-300 capitalize">{formatCurrentMonth(currentDate)}</span>
-            <div className="flex gap-1">
-              <button onClick={prevMonth} className="p-1.5 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors">
-                <ChevronLeft className="w-4 h-4" />
+          <div className="flex items-center justify-between w-full md:w-auto gap-4">
+            <div className="flex items-center gap-2 bg-zinc-900/80 border border-zinc-800 rounded-full p-1 pl-4 pr-1">
+              <span className="text-sm font-medium text-zinc-300 capitalize">{formatCurrentMonth(currentDate)}</span>
+              <div className="flex gap-1">
+                <button onClick={prevMonth} className="p-1.5 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors">
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button onClick={nextMonth} className="p-1.5 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors">
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleReset}
+                title="Resetar Dados"
+                className="p-2.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-all duration-300"
+              >
+                <RotateCcw className="w-5 h-5" />
               </button>
-              <button onClick={nextMonth} className="p-1.5 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors">
-                <ChevronRight className="w-4 h-4" />
+              <button
+                onClick={handleLogout}
+                title="Sair"
+                className="p-2.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
+              >
+                <LogOut className="w-5 h-5" />
+              </button>
+              <div className="w-px h-8 bg-zinc-800 mx-1 hidden md:block"></div>
+              <button
+                onClick={() => handleOpenModal()}
+                className="flex items-center gap-2 px-5 py-2.5 bg-white text-black hover:bg-gray-200 rounded-full text-sm font-semibold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Nova</span>
               </button>
             </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleReset}
-              title="Resetar Dados"
-              className="p-2.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-all duration-300"
-            >
-              <RotateCcw className="w-5 h-5" />
-            </button>
-            <button
-              onClick={handleLogout}
-              title="Sair"
-              className="p-2.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
-            <div className="w-px h-8 bg-zinc-800 mx-1"></div>
-            <button
-              onClick={() => handleOpenModal()}
-              className="flex items-center gap-2 px-5 py-2.5 bg-white text-black hover:bg-gray-200 rounded-full text-sm font-semibold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Nova</span>
-            </button>
           </div>
         </header>
 
@@ -617,6 +619,15 @@ export default function Home() {
           </div>
         </section>
       </div>
+
+      {/* Botão flutuante para mobile */}
+      <button
+        onClick={() => handleOpenModal()}
+        className="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-white text-black rounded-full shadow-2xl hover:bg-gray-200 transition-all flex items-center justify-center z-50"
+        title="Nova Transação"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
     </main>
   );
 }
