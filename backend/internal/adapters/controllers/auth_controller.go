@@ -60,7 +60,6 @@ func (h *AuthController) Login(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"token": token})
 }
 
-// Middleware
 type contextKey string
 
 const UserIDKey contextKey = "userID"
@@ -89,7 +88,8 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 		jwtKey := []byte(os.Getenv("JWT_SECRET"))
 		if len(jwtKey) == 0 {
-			jwtKey = []byte("secret_key_plena_app_2025")
+			http.Error(w, "Server configuration error: JWT_SECRET not set", http.StatusInternalServerError)
+			return
 		}
 
 		token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
