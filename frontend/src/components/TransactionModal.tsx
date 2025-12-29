@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface Transaction {
     id: number;
@@ -23,7 +25,7 @@ export default function TransactionModal({
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("Salário");
     const [description, setDescription] = useState("");
-    const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+    const [date, setDate] = useState<Date>(new Date());
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -33,13 +35,13 @@ export default function TransactionModal({
             setCategory(transactionToEdit.category);
             setDescription(transactionToEdit.description);
             const d = new Date(transactionToEdit.date);
-            setDate(d.toISOString().split("T")[0]);
+            setDate(d);
         } else {
             setType("income");
             setAmount("");
             setCategory("Salário");
             setDescription("");
-            setDate(new Date().toISOString().split("T")[0]);
+            setDate(new Date());
         }
     }, [transactionToEdit, isOpen]);
 
@@ -64,7 +66,7 @@ export default function TransactionModal({
                     amount: parseFloat(amount),
                     category,
                     description,
-                    date: new Date(date).toISOString(),
+                    date: date.toISOString(),
                     type // Needed for PUT, ignored for POST endpoints usually unless universal
                 }),
                 headers: {
@@ -144,11 +146,10 @@ export default function TransactionModal({
                         <label className="block text-sm font-medium text-zinc-400 mb-1">
                             Data
                         </label>
-                        <input
-                            type="date"
-                            required
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
+                        <DatePicker
+                            selected={date}
+                            onChange={(date: Date | null) => date && setDate(date)}
+                            dateFormat="dd/MM/yyyy"
                             className="w-full rounded-lg bg-zinc-800 border border-zinc-700 px-4 py-2.5 text-white placeholder-zinc-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-all"
                         />
                     </div>
