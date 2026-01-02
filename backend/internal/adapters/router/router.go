@@ -52,8 +52,18 @@ func (router *Router) enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
 		allowOrigin := false
+
 		for _, allowedOrigin := range router.config.AllowedOrigins {
-			if origin == allowedOrigin {
+			if allowedOrigin == "*" {
+				allowOrigin = true
+				break
+			} else if len(allowedOrigin) > 0 && allowedOrigin[len(allowedOrigin)-1] == '*' {
+				prefix := allowedOrigin[:len(allowedOrigin)-1]
+				if len(origin) >= len(prefix) && origin[:len(prefix)] == prefix {
+					allowOrigin = true
+					break
+				}
+			} else if origin == allowedOrigin {
 				allowOrigin = true
 				break
 			}
