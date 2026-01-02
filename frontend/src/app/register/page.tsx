@@ -23,7 +23,8 @@ export default function RegisterPage() {
         setError("");
 
         try {
-            const res = await fetch(`http://${window.location.hostname}:8080/api/register`, {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || `http://${window.location.hostname}:8080`;
+            const res = await fetch(`${apiUrl}/api/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),

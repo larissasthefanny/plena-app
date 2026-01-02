@@ -28,6 +28,8 @@ import MethodInfoModal from "@/components/MethodInfoModal";
 import GoalModal from "@/components/GoalModal";
 import GoalCard from "@/components/GoalCard";
 
+const getApiUrl = () => process.env.NEXT_PUBLIC_API_URL || `http://${window.location.hostname}:8080`;
+
 interface Transaction {
   id: number;
   type: "income" | "expense";
@@ -70,7 +72,7 @@ export default function Home() {
     const year = currentDate.getFullYear();
 
     try {
-      const res = await fetch(`http://${window.location.hostname}:8080/api/transactions?month=${month}&year=${year}`, {
+      const res = await fetch(`${getApiUrl()}/api/transactions?month=${month}&year=${year}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -97,7 +99,7 @@ export default function Home() {
     if (!token) return;
 
     try {
-      const res = await fetch(`http://${window.location.hostname}:8080/api/goals`, {
+      const res = await fetch(`${getApiUrl()}/api/goals`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
 
@@ -143,7 +145,7 @@ export default function Home() {
 
     const token = localStorage.getItem("plena_token");
     try {
-      const res = await fetch(`http://${window.location.hostname}:8080/api/transactions/${id}`, {
+      const res = await fetch(`${getApiUrl()}/api/transactions/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -175,7 +177,7 @@ export default function Home() {
 
     const token = localStorage.getItem("plena_token");
     try {
-      const res = await fetch(`http://${window.location.hostname}:8080/api/goals/${id}`, {
+      const res = await fetch(`${getApiUrl()}/api/goals/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -194,7 +196,7 @@ export default function Home() {
   const handleAddProgress = async (id: number, amount: number) => {
     const token = localStorage.getItem("plena_token");
     try {
-      const res = await fetch(`http://${window.location.hostname}:8080/api/goals/${id}/progress`, {
+      const res = await fetch(`${getApiUrl()}/api/goals/${id}/progress`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -224,7 +226,7 @@ export default function Home() {
 
     try {
       setLoading(true);
-      await fetch(`http://${window.location.hostname}:8080/api/reset`, {
+      await fetch(`${getApiUrl()}/api/reset`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`

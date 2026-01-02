@@ -60,7 +60,8 @@ export default function TransactionModal({
 
         try {
             const token = localStorage.getItem("plena_token");
-            const res = await fetch(`http://${window.location.hostname}:8080${endpoint}`, {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || `http://${window.location.hostname}:8080`;
+            const res = await fetch(`${apiUrl}${endpoint}`, {
                 method: method,
                 body: JSON.stringify({
                     amount: parseFloat(amount),
