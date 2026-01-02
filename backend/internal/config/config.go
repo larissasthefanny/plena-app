@@ -29,22 +29,24 @@ func Load() *AppConfig {
 		log.Println("No .env file found or error loading it, using system environment variables")
 	}
 
-	if dbURL := getEnv("DB_HOST", ""); dbURL != "" {
+	if dbURL := getEnv("DATABASE_URL", ""); dbURL != "" {
+		log.Printf("Using DATABASE_URL: %s", dbURL)
 		return parseDatabaseURL(dbURL)
 	}
 
+	log.Println("Using individual DB environment variables")
 	dbPort, _ := strconv.Atoi(getEnv("DB_PORT", "5432"))
 
 	return &AppConfig{
 		DB: DBConfig{
-			Host:     getEnv("DB_HOST", ""),
+			Host:     getEnv("DB_HOST", "127.0.0.1"),
 			Port:     dbPort,
-			User:     getEnv("DB_USER", ""),
-			Password: getEnv("DB_PASSWORD", ""),
-			Name:     getEnv("DB_NAME", ""),
+			User:     getEnv("DB_USER", "plena_user"),
+			Password: getEnv("DB_PASSWORD", "plena_password"),
+			Name:     getEnv("DB_NAME", "plena_db"),
 		},
 		Port:      getEnv("PORT", "8080"),
-		JWTSecret: getEnv("JWT_SECRET", "secret_key_plena_app_2025"),
+		JWTSecret: getEnv("JWT_SECRET", ""),
 	}
 }
 
@@ -61,18 +63,21 @@ func parseDatabaseURL(dbURL string) *AppConfig {
 		log.Fatalf("Invalid DATABASE_URL: %v", err)
 	}
 
+	// Extract password from URL
 	password, _ := parsedURL.User.Password()
 
+	// Extract port from host
 	host := parsedURL.Hostname()
 	portStr := parsedURL.Port()
 	if portStr == "" {
-		portStr = "5432"
+		portStr = "5432" // Default PostgreSQL port
 	}
 	port, _ := strconv.Atoi(portStr)
 
+	// Extract database name from path
 	dbName := strings.TrimPrefix(parsedURL.Path, "/")
 	if dbName == "" {
-		dbName = "postgres"
+		dbName = "postgres" // Default database name
 	}
 
 	return &AppConfig{
@@ -84,6 +89,6 @@ func parseDatabaseURL(dbURL string) *AppConfig {
 			Name:     dbName,
 		},
 		Port:      getEnv("PORT", "8080"),
-		JWTSecret: getEnv("JWT_SECRET", ""),
+		JWTSecret: getEnv("JWT_SECRET", "secret_key_plena_app_2025"),
 	}
 }
