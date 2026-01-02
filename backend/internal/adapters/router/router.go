@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/larissasthefanny/plena-app/backend/internal/adapters/controllers"
 	"github.com/larissasthefanny/plena-app/backend/internal/config"
@@ -57,11 +58,12 @@ func (router *Router) enableCORS(next http.Handler) http.Handler {
 			if allowedOrigin == "*" {
 				allowOrigin = true
 				break
-			} else if len(allowedOrigin) > 0 && allowedOrigin[len(allowedOrigin)-1] == '*' {
-				prefix := allowedOrigin[:len(allowedOrigin)-1]
-				if len(origin) >= len(prefix) {
-					originPrefix := origin[:len(prefix)]
-					if originPrefix == prefix {
+			} else if strings.Contains(allowedOrigin, "*") {
+				parts := strings.Split(allowedOrigin, "*")
+				if len(parts) == 2 {
+					prefix := parts[0]
+					suffix := parts[1]
+					if strings.HasPrefix(origin, prefix) && strings.HasSuffix(origin, suffix) {
 						allowOrigin = true
 						break
 					}
@@ -74,10 +76,10 @@ func (router *Router) enableCORS(next http.Handler) http.Handler {
 
 		if allowOrigin {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Access-Control-Allow-Credentials", "true")
 		}
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-		w.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		if r.Method == "OPTIONS" {
 			w.WriteHeader(http.StatusOK)
