@@ -117,7 +117,7 @@ export default function LoginPage() {
                                     Plena
                                 </h2>
                                 <p className="text-gray-400">
-                                    Bem-vindo de volta! 👋
+                                    Entre para gerenciar suas finanças
                                 </p>
                             </div>
 
