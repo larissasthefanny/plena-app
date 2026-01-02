@@ -59,9 +59,12 @@ func (router *Router) enableCORS(next http.Handler) http.Handler {
 				break
 			} else if len(allowedOrigin) > 0 && allowedOrigin[len(allowedOrigin)-1] == '*' {
 				prefix := allowedOrigin[:len(allowedOrigin)-1]
-				if len(origin) >= len(prefix) && origin[:len(prefix)] == prefix {
-					allowOrigin = true
-					break
+				if len(origin) >= len(prefix) {
+					originPrefix := origin[:len(prefix)]
+					if originPrefix == prefix {
+						allowOrigin = true
+						break
+					}
 				}
 			} else if origin == allowedOrigin {
 				allowOrigin = true
@@ -77,6 +80,7 @@ func (router *Router) enableCORS(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
 			return
 		}
 
