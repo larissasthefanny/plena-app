@@ -2,6 +2,8 @@
 
 ![Plena App Showcase](docs/app_showcase.png)
 
+**🌐 Acesse a aplicação em produção:** [https://larissasthefanny-plena-app.vercel.app/login](https://larissasthefanny-plena-app.vercel.app/login)
+
 Bem-vindo ao **Plena**, sua aplicação de finanças pessoais focada na metodologia **50/30/20**.
 Este projeto utiliza **Go (Golang)** no backend para alta performance e **Next.js** no frontend para uma experiência de usuário moderna.
 
