@@ -290,101 +290,112 @@ export default function Home() {
   ].filter(d => d.value > 0);
 
   return (
-    <main className="min-h-screen bg-[#0A0A0A] text-white p-6 sm:p-8 font-sans selection:bg-purple-500/30">
-      <TransactionModal isOpen={isModalOpen} onClose={handleModalClose} transactionToEdit={transactionToEdit} />
-      <MethodInfoModal isOpen={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)} />
-      <GoalModal isOpen={isGoalModalOpen} onClose={handleGoalModalClose} goalToEdit={goalToEdit} />
+    <main className="min-h-screen bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20 text-white p-6 sm:p-8 font-sans selection:bg-purple-500/30 relative">
+      {/* Background decorativo */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-purple-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-pink-500/5 rounded-full blur-3xl"></div>
+      </div>
 
-      <div className="max-w-5xl mx-auto space-y-8">
+      <div className="relative z-10">
+        <TransactionModal isOpen={isModalOpen} onClose={handleModalClose} transactionToEdit={transactionToEdit} />
+        <MethodInfoModal isOpen={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)} />
+        <GoalModal isOpen={isGoalModalOpen} onClose={handleGoalModalClose} goalToEdit={goalToEdit} />
 
-        <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 py-4">
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl shadow-lg shadow-purple-900/20">
-              <LayoutDashboard className="w-6 h-6 text-white" />
+        <div className="max-w-6xl mx-auto space-y-8">
+
+          <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 py-4 backdrop-blur-sm">
+            <div className="flex items-center gap-3 w-full md:w-auto">
+              <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl shadow-lg shadow-purple-900/50">
+                <LayoutDashboard className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+                  Plena
+                </h1>
+                <p className="text-xs text-gray-500 font-medium tracking-wide">DASHBOARD</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-                Plena
-              </h1>
-              <p className="text-xs text-gray-500 font-medium tracking-wide">FINANÇAS PESSOAIS</p>
-            </div>
-          </div>
 
-          <div className="flex items-center justify-between w-full md:w-auto gap-4">
-            <div className="flex items-center gap-2 bg-zinc-900/80 border border-zinc-800 rounded-full p-1 pl-4 pr-1">
-              <span className="text-sm font-medium text-zinc-300 capitalize">{formatCurrentMonth(currentDate)}</span>
-              <div className="flex gap-1">
-                <button onClick={prevMonth} className="p-1.5 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors">
-                  <ChevronLeft className="w-4 h-4" />
+            <div className="flex items-center justify-between w-full md:w-auto gap-4">
+              <div className="flex items-center gap-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full p-1 pl-4 pr-1 shadow-lg">
+                <span className="text-sm font-medium text-zinc-300 capitalize">{formatCurrentMonth(currentDate)}</span>
+                <div className="flex gap-1">
+                  <button onClick={prevMonth} className="p-2 hover:bg-white/10 rounded-full text-zinc-400 hover:text-white transition-all">
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button onClick={nextMonth} className="p-2 hover:bg-white/10 rounded-full text-zinc-400 hover:text-white transition-all">
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleReset}
+                  title="Resetar Dados"
+                  className="p-2.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-all duration-300 backdrop-blur-sm"
+                >
+                  <RotateCcw className="w-5 h-5" />
                 </button>
-                <button onClick={nextMonth} className="p-1.5 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors">
-                  <ChevronRight className="w-4 h-4" />
+                <button
+                  onClick={handleLogout}
+                  title="Sair"
+                  className="p-2.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300 backdrop-blur-sm"
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+                <div className="w-px h-8 bg-white/10 mx-1 hidden md:block"></div>
+                <button
+                  onClick={() => handleOpenModal()}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-full text-sm font-semibold transition-all shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 active:scale-95"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Nova</span>
                 </button>
               </div>
             </div>
+          </header>
 
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handleReset}
-                title="Resetar Dados"
-                className="p-2.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-all duration-300"
-              >
-                <RotateCcw className="w-5 h-5" />
-              </button>
-              <button
-                onClick={handleLogout}
-                title="Sair"
-                className="p-2.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
-              >
-                <LogOut className="w-5 h-5" />
-              </button>
-              <div className="w-px h-8 bg-zinc-800 mx-1 hidden md:block"></div>
-              <button
-                onClick={() => handleOpenModal()}
-                className="flex items-center gap-2 px-5 py-2.5 bg-white text-black hover:bg-gray-200 rounded-full text-sm font-semibold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Nova</span>
-              </button>
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl relative overflow-hidden group hover:bg-white/[0.07] transition-all">
+              <div className="absolute top-0 right-0 p-32 bg-purple-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 text-zinc-400 mb-3">
+                  <div className="p-2 bg-purple-500/10 rounded-lg">
+                    <Wallet className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <span className="text-sm font-medium uppercase tracking-wider">Renda Mensal</span>
+                </div>
+                <div className="text-5xl font-bold text-white tracking-tight mb-2">
+                  {formatCurrency(totalIncome)}
+                </div>
+                <p className="text-sm text-zinc-500">
+                  Total acumulado este mês
+                </p>
+              </div>
             </div>
-          </div>
-        </header>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-8 rounded-3xl bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800/50 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-32 bg-purple-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+            <div className="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col justify-center relative overflow-hidden hover:bg-white/[0.07] transition-all">
+              <div className="absolute bottom-0 left-0 p-32 bg-green-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
 
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 text-zinc-400 mb-2">
-                <Wallet className="w-5 h-5" />
-                <span className="text-sm font-medium uppercase tracking-wider">Renda Mensal</span>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 text-zinc-400 mb-3">
+                  <div className="p-2 bg-green-500/10 rounded-lg">
+                    <PiggyBank className="w-5 h-5 text-green-400" />
+                  </div>
+                  <span className="text-sm font-medium uppercase tracking-wider">Disponível</span>
+                </div>
+                <div className={`text-4xl font-bold tracking-tight mb-2 ${available >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                  {formatCurrency(available)}
+                </div>
+                <p className="text-sm text-zinc-500">
+                  Renda menos despesas totais
+                </p>
               </div>
-              <div className="text-5xl font-bold text-white tracking-tight mb-2">
-                {formatCurrency(totalIncome)}
-              </div>
-              <p className="text-sm text-zinc-500">
-                Total acumulado este mês
-              </p>
             </div>
-          </div>
-
-          <div className="p-8 rounded-3xl bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800/50 shadow-2xl flex flex-col justify-center relative overflow-hidden">
-            <div className="absolute bottom-0 left-0 p-32 bg-green-500/5 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
-
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 text-zinc-400 mb-2">
-                <PiggyBank className="w-5 h-5" />
-                <span className="text-sm font-medium uppercase tracking-wider">Disponível</span>
-              </div>
-              <div className={`text-4xl font-bold tracking-tight mb-2 ${available >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                {formatCurrency(available)}
-              </div>
-              <p className="text-sm text-zinc-500">
-                Renda menos despesas totais
-              </p>
-            </div>
-          </div>
-        </section>
+          </section>
 
         {/* 50/30/20 Cards */}
         <section>
@@ -404,12 +415,12 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Needs - 50% */}
-            <div className="p-6 rounded-3xl bg-[#111] border border-zinc-800 hover:border-blue-500/30 transition-colors group">
+            <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-blue-500/30 hover:bg-white/[0.07] transition-all group">
               <div className="flex justify-between items-start mb-6">
                 <div className="p-3 bg-blue-500/10 rounded-2xl text-blue-400 group-hover:bg-blue-500/20 transition-colors">
                   <HomeIcon className="w-6 h-6" />
                 </div>
-                <span className="px-3 py-1 bg-zinc-900 rounded-full text-xs font-bold text-zinc-400 border border-zinc-800">50%</span>
+                <span className="px-3 py-1 bg-white/5 rounded-full text-xs font-bold text-zinc-400 border border-white/10">50%</span>
               </div>
 
               <div className="space-y-1 mb-4">
@@ -422,21 +433,21 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="w-full bg-zinc-800/50 h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-white/5 h-2.5 rounded-full overflow-hidden backdrop-blur-sm">
                 <div
-                  className="bg-blue-500 h-full rounded-full transition-all duration-1000 ease-out"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full transition-all duration-1000 ease-out shadow-lg shadow-blue-500/50"
                   style={{ width: `${calculateProgress(needsActual, needsTarget)}%` }}
                 ></div>
               </div>
             </div>
 
             {/* Wants - 30% */}
-            <div className="p-6 rounded-3xl bg-[#111] border border-zinc-800 hover:border-purple-500/30 transition-colors group">
+            <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-purple-500/30 hover:bg-white/[0.07] transition-all group">
               <div className="flex justify-between items-start mb-6">
                 <div className="p-3 bg-purple-500/10 rounded-2xl text-purple-400 group-hover:bg-purple-500/20 transition-colors">
                   <Sparkles className="w-6 h-6" />
                 </div>
-                <span className="px-3 py-1 bg-zinc-900 rounded-full text-xs font-bold text-zinc-400 border border-zinc-800">30%</span>
+                <span className="px-3 py-1 bg-white/5 rounded-full text-xs font-bold text-zinc-400 border border-white/10">30%</span>
               </div>
 
               <div className="space-y-1 mb-4">
@@ -449,21 +460,21 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="w-full bg-zinc-800/50 h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-white/5 h-2.5 rounded-full overflow-hidden backdrop-blur-sm">
                 <div
-                  className="bg-purple-500 h-full rounded-full transition-all duration-1000 ease-out"
+                  className="bg-gradient-to-r from-purple-500 to-purple-600 h-full rounded-full transition-all duration-1000 ease-out shadow-lg shadow-purple-500/50"
                   style={{ width: `${calculateProgress(wantsActual, wantsTarget)}%` }}
                 ></div>
               </div>
             </div>
 
             {/* Savings - 20% */}
-            <div className="p-6 rounded-3xl bg-[#111] border border-zinc-800 hover:border-emerald-500/30 transition-colors group">
+            <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-emerald-500/30 hover:bg-white/[0.07] transition-all group">
               <div className="flex justify-between items-start mb-6">
                 <div className="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400 group-hover:bg-emerald-500/20 transition-colors">
                   <TrendingUp className="w-6 h-6" />
                 </div>
-                <span className="px-3 py-1 bg-zinc-900 rounded-full text-xs font-bold text-zinc-400 border border-zinc-800">20%</span>
+                <span className="px-3 py-1 bg-white/5 rounded-full text-xs font-bold text-zinc-400 border border-white/10">20%</span>
               </div>
 
               <div className="space-y-1 mb-4">
@@ -476,9 +487,9 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="w-full bg-zinc-800/50 h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-white/5 h-2.5 rounded-full overflow-hidden backdrop-blur-sm">
                 <div
-                  className="bg-emerald-500 h-full rounded-full transition-all duration-1000 ease-out"
+                  className="bg-gradient-to-r from-emerald-500 to-emerald-600 h-full rounded-full transition-all duration-1000 ease-out shadow-lg shadow-emerald-500/50"
                   style={{ width: `${calculateProgress(savingsActual, savingsTarget)}%` }}
                 ></div>
               </div>
@@ -491,37 +502,51 @@ export default function Home() {
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-semibold text-zinc-200">Distribuição de Gastos</h3>
           </div>
-          <div className="p-4 rounded-3xl bg-[#111] border border-zinc-800 flex items-center justify-center relative min-h-[300px]">
+          <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center relative min-h-[320px] hover:bg-white/[0.07] transition-all">
             {chartData.length > 0 ? (
               <div className="w-full h-64 relative">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={chartData}
-                      innerRadius={60}
-                      outerRadius={80}
-                      paddingAngle={5}
+                      innerRadius={70}
+                      outerRadius={95}
+                      paddingAngle={6}
                       dataKey="value"
                     >
                       {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                        <Cell key={`cell-${index}`} fill={entry.color} stroke="rgba(255,255,255,0.05)" strokeWidth={2} />
                       ))}
                     </Pie>
                     <Tooltip
-                      contentStyle={{ borderRadius: '12px', border: 'none', backgroundColor: '#333', color: '#fff' }}
+                      contentStyle={{ 
+                        borderRadius: '16px', 
+                        border: 'none', 
+                        backgroundColor: 'rgba(0,0,0,0.9)', 
+                        backdropFilter: 'blur(20px)',
+                        color: '#fff',
+                        padding: '12px',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
+                      }}
                       itemStyle={{ color: '#fff' }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="text-center">
-                    <p className="text-xs font-medium text-zinc-500 uppercase">Total Despesas</p>
-                    <p className="text-xl font-bold text-white">{formatCurrency(totalExpenses)}</p>
+                  <div className="text-center p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
+                    <p className="text-xs font-medium text-zinc-400 uppercase mb-1">Total</p>
+                    <p className="text-2xl font-bold text-white">{formatCurrency(totalExpenses)}</p>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="text-zinc-600 text-sm">Sem dados visuais</div>
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center p-4 bg-white/5 rounded-full mb-3 text-zinc-500">
+                  <LayoutDashboard className="w-6 h-6" />
+                </div>
+                <p className="text-zinc-400 font-medium">Sem dados de gastos</p>
+                <p className="text-zinc-600 text-sm mt-1">Adicione despesas para ver o gráfico</p>
+              </div>
             )}
           </div>
         </section>
@@ -573,35 +598,35 @@ export default function Home() {
 
           <div className="space-y-3">
             {transactions.slice(0, 5).map((item, i) => (
-              <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-[#111] border border-zinc-800/50 hover:bg-zinc-900 transition-all group">
+              <div key={i} className="flex items-center justify-between p-5 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/[0.07] hover:border-white/20 transition-all group">
                 <div className="flex items-center gap-4">
-                  <div className={`p-2.5 rounded-full ${item.type === 'income'
-                    ? 'bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500/20'
-                    : 'bg-red-500/10 text-red-500 group-hover:bg-red-500/20'
+                  <div className={`p-3 rounded-xl ${item.type === 'income'
+                    ? 'bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20'
+                    : 'bg-red-500/10 text-red-400 group-hover:bg-red-500/20'
                     } transition-colors`}>
                     {item.type === 'income' ? <ArrowUpCircle className="w-5 h-5" /> : <ArrowDownCircle className="w-5 h-5" />}
                   </div>
                   <div>
-                    <h4 className="font-medium text-zinc-200">{item.category}</h4>
+                    <h4 className="font-semibold text-zinc-100">{item.category}</h4>
                     {item.description && (
-                      <p className="text-xs text-zinc-500">{item.description}</p>
+                      <p className="text-sm text-zinc-400">{item.description}</p>
                     )}
-                    <p className="text-[10px] text-zinc-600 mt-0.5">
-                      {new Date(item.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
+                    <p className="text-xs text-zinc-600 mt-1">
+                      {new Date(item.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className={`font-semibold ${item.type === 'income' ? 'text-emerald-400' : 'text-zinc-300'}`}>
+                  <span className={`font-bold text-lg ${item.type === 'income' ? 'text-emerald-400' : 'text-zinc-200'}`}>
                     {item.type === 'income' ? '+' : '-'} {formatCurrency(item.amount)}
                   </span>
 
-                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => handleOpenModal(item)} className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-full transition-colors">
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => handleOpenModal(item)} className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors">
                       <Pencil className="w-4 h-4" />
                     </button>
-                    <button onClick={() => handleDelete(item.id)} className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-colors">
+                    <button onClick={() => handleDelete(item.id)} className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -610,25 +635,26 @@ export default function Home() {
             ))}
 
             {!loading && transactions.length === 0 && (
-              <div className="text-center py-12 border border-dashed border-zinc-800 rounded-3xl bg-zinc-900/20">
-                <div className="inline-flex items-center justify-center p-4 bg-zinc-800 rounded-full mb-4 text-zinc-500">
-                  <Wallet className="w-6 h-6" />
+              <div className="text-center py-16 border border-dashed border-white/10 rounded-3xl bg-white/5 backdrop-blur-xl">
+                <div className="inline-flex items-center justify-center p-4 bg-white/5 rounded-full mb-4 text-zinc-500">
+                  <Wallet className="w-8 h-8" />
                 </div>
-                <p className="text-zinc-400 font-medium">Nenhuma transação ainda</p>
-                <p className="text-zinc-600 text-sm mt-1">Clique em &quot;Nova&quot; para começar</p>
+                <p className="text-zinc-300 font-semibold text-lg">Nenhuma transação ainda</p>
+                <p className="text-zinc-500 text-sm mt-2">Clique em &quot;Nova&quot; para começar a gerenciar suas finanças</p>
               </div>
             )}
           </div>
         </section>
       </div>
+      </div>
 
       {/* Botão flutuante para mobile */}
       <button
         onClick={() => handleOpenModal()}
-        className="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-white text-black rounded-full shadow-2xl hover:bg-gray-200 transition-all flex items-center justify-center z-50"
+        className="md:hidden fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-full shadow-2xl shadow-purple-500/50 hover:shadow-purple-500/70 hover:scale-110 active:scale-95 transition-all flex items-center justify-center z-50"
         title="Nova Transação"
       >
-        <Plus className="w-6 h-6" />
+        <Plus className="w-7 h-7" />
       </button>
     </main>
   );
