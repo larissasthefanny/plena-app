@@ -19,9 +19,10 @@ type DBConfig struct {
 }
 
 type AppConfig struct {
-	DB        DBConfig
-	Port      string
-	JWTSecret string
+	DB             DBConfig
+	Port           string
+	JWTSecret      string
+	AllowedOrigins []string
 }
 
 func Load() *AppConfig {
@@ -37,6 +38,13 @@ func Load() *AppConfig {
 	log.Println("Using individual DB environment variables")
 	dbPort, _ := strconv.Atoi(getEnv("DB_PORT", "5432"))
 
+	// Parse allowed origins
+	allowedOriginsStr := getEnv("ALLOWED_ORIGINS", "http://localhost:3000")
+	allowedOrigins := strings.Split(allowedOriginsStr, ",")
+	for i, origin := range allowedOrigins {
+		allowedOrigins[i] = strings.TrimSpace(origin)
+	}
+
 	return &AppConfig{
 		DB: DBConfig{
 			Host:     getEnv("DB_HOST", "127.0.0.1"),
@@ -45,8 +53,9 @@ func Load() *AppConfig {
 			Password: getEnv("DB_PASSWORD", "plena_password"),
 			Name:     getEnv("DB_NAME", "plena_db"),
 		},
-		Port:      getEnv("PORT", "8080"),
-		JWTSecret: getEnv("JWT_SECRET", ""),
+		Port:           getEnv("PORT", "8080"),
+		JWTSecret:      getEnv("JWT_SECRET", ""),
+		AllowedOrigins: allowedOrigins,
 	}
 }
 
@@ -63,21 +72,24 @@ func parseDatabaseURL(dbURL string) *AppConfig {
 		log.Fatalf("Invalid DATABASE_URL: %v", err)
 	}
 
-	// Extract password from URL
 	password, _ := parsedURL.User.Password()
 
-	// Extract port from host
 	host := parsedURL.Hostname()
 	portStr := parsedURL.Port()
 	if portStr == "" {
-		portStr = "5432" // Default PostgreSQL port
+		portStr = "5432"
 	}
 	port, _ := strconv.Atoi(portStr)
 
-	// Extract database name from path
 	dbName := strings.TrimPrefix(parsedURL.Path, "/")
 	if dbName == "" {
-		dbName = "postgres" // Default database name
+		dbName = "postgres"
+	}
+
+	allowedOriginsStr := getEnv("ALLOWED_ORIGINS", "http://localhost:3000")
+	allowedOrigins := strings.Split(allowedOriginsStr, ",")
+	for i, origin := range allowedOrigins {
+		allowedOrigins[i] = strings.TrimSpace(origin)
 	}
 
 	return &AppConfig{
@@ -88,7 +100,8 @@ func parseDatabaseURL(dbURL string) *AppConfig {
 			Password: password,
 			Name:     dbName,
 		},
-		Port:      getEnv("PORT", "8080"),
-		JWTSecret: getEnv("JWT_SECRET", "secret_key_plena_app_2025"),
+		Port:           getEnv("PORT", "8080"),
+		JWTSecret:      getEnv("JWT_SECRET", "secret_key_plena_app_2025"),
+		AllowedOrigins: allowedOrigins,
 	}
 }

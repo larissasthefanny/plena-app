@@ -40,7 +40,7 @@ func main() {
 	authController := controllers.NewAuthController(authService)
 	goalController := controllers.NewGoalController(goalService)
 
-	appRouter := router.NewRouter(transController, authController, goalController)
+	appRouter := router.NewRouter(transController, authController, goalController, cfg)
 	handler := appRouter.Setup()
 
 	log.Printf("Server starting on port %s...", cfg.Port)

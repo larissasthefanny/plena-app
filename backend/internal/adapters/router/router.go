@@ -4,19 +4,22 @@ import (
 	"net/http"
 
 	"github.com/larissasthefanny/plena-app/backend/internal/adapters/controllers"
+	"github.com/larissasthefanny/plena-app/backend/internal/config"
 )
 
 type Router struct {
 	transController *controllers.TransactionController
 	authController  *controllers.AuthController
 	goalController  *controllers.GoalController
+	config          *config.AppConfig
 }
 
-func NewRouter(tc *controllers.TransactionController, ac *controllers.AuthController, gc *controllers.GoalController) *Router {
+func NewRouter(tc *controllers.TransactionController, ac *controllers.AuthController, gc *controllers.GoalController, cfg *config.AppConfig) *Router {
 	return &Router{
 		transController: tc,
 		authController:  ac,
 		goalController:  gc,
+		config:          cfg,
 	}
 }
 
@@ -47,9 +50,21 @@ func (router *Router) Setup() http.Handler {
 
 func (router *Router) enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+		origin := r.Header.Get("Origin")
+		allowOrigin := false
+		for _, allowedOrigin := range router.config.AllowedOrigins {
+			if origin == allowedOrigin {
+				allowOrigin = true
+				break
+			}
+		}
+
+		if allowOrigin {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+		}
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		if r.Method == "OPTIONS" {
 			return
