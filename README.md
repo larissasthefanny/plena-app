@@ -1,155 +1,259 @@
-# Plena - Personal Finance App
+<p align="center">
+  <img src="docs/app_showcase.png" alt="Plena App" width="100%">
+</p>
 
-![Plena App Showcase](docs/app_showcase.png)
+<h1 align="center">💜 Plena - Finanças Pessoais Inteligentes</h1>
 
-**🌐 Acesse a aplicação em produção:** [https://plena-financas.vercel.app/login](https://plena-financas.vercel.app/login)
+<p align="center">
+  <strong>Transforme sua relação com o dinheiro usando o método 50/30/20</strong>
+</p>
 
-Bem-vindo ao **Plena**, sua aplicação de finanças pessoais focada na metodologia **50/30/20**.
-Este projeto utiliza **Go (Golang)** no backend para alta performance e **Next.js** no frontend para uma experiência de usuário moderna.
-
----
-
-## 📱 Mobile First & Design Premium
-
-O Plena foi desenhado pensando em você, onde quer que esteja.
-*   **Responsividade Total**: Layout se adapta perfeitamente do Desktop ao Mobile.
-*   **Dark Mode Nativo**: Interface elegante, confortável para os olhos e com economia de bateria.
-*   **Glassmorphism**: Elementos visuais modernos com transparências e blurs que dão profundidade.
-
-## 🚀 Arquitetura do Projeto
-
-O projeto segue os princípios da **Clean Architecture** (Arquitetura Limpa), garantindo que o código seja desacoplado, testável e fácil de manter.
-
-### Estrutura de Pastas (Backend)
-
-`backend/`
-*   `cmd/api/`: Ponto de entrada da aplicação (`main.go`). Aqui carregamos as configurações, conectamos ao banco e iniciamos o servidor.
-*   `internal/`
-    *   `config/`: Gerenciamento centralizado de variáveis de ambiente.
-    *   `core/`: Contém a lógica de negócio pura.
-        *   `domain/`: Entidades principais (ex: `Transaction`, `User`, `Goal`).
-        *   `ports/`: Interfaces que definem os contratos.
-        *   `services/`: Implementação da lógica de negócio.
-    *   `adapters/`: Camada que se comunica com o mundo externo.
-        *   `controllers/`: Recebem as requisições HTTP (antigos handlers).
-        *   `router/`: Configuração de rotas e middlewares (CORS, Auth).
-        *   `repository/`: Acesso ao banco de dados (PostgreSQL).
-        *   `clients/`: Conexões externas (Banco de Dados).
-*   `migrations/`: Scripts SQL para criação de tabelas.
-*   `.env`: Arquivo de configuração (variáveis de ambiente).
-
-### Estrutura (Frontend)
-
-`frontend/`
-*   `src/app/`: Páginas do Next.js (Dashboard, Login, Register).
-*   `src/components/`: Componentes reutilizáveis (TransactionModal, GoalModal, GoalCard, etc).
-*   Utiliza **Lucide React** para ícones e **Tailwind CSS** para estilização.
+<p align="center">
+  <a href="https://plena-financas.vercel.app/login">
+    <img src="https://img.shields.io/badge/🌐_Demo_Live-Acessar_Aplicação-7c3aed?style=for-the-badge" alt="Demo Live">
+  </a>
+  <img src="https://img.shields.io/badge/Go-1.24-00ADD8?style=for-the-badge&logo=go" alt="Go">
+  <img src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js" alt="Next.js">
+  <img src="https://img.shields.io/badge/PostgreSQL-15-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+</p>
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## ✨ O que é o Plena?
 
-*   **Backend**: Go 1.23+
-*   **Frontend**: Next.js 16, React 19, Tailwind CSS 4
-*   **Bibliotecas Frontend**: Recharts (Gráficos), Sonner (Notificações), Lucide React (Ícones)
-*   **Banco de Dados**: PostgreSQL 15
-*   **Autenticação**: JWT (JSON Web Tokens) e BCrypt (Hashing de senhas)
-*   **PWA**: @ducanh2912/next-pwa
-*   **Testes**: testify (Go), sqlmock (Go)
-*   **Ambiente**: Docker (opcional, para rodar o banco)
+**Plena** é mais do que um app de finanças - é seu companheiro para alcançar **liberdade financeira**. Construído com tecnologias modernas (Go + Next.js), oferece uma experiência **rápida, segura e intuitiva** para gerenciar seu dinheiro de forma inteligente.
+
+### 🎯 Por que usar o Plena?
+
+- 💰 **Método 50/30/20 Automático**: Divida suas finanças automaticamente entre Essenciais, Desejos e Investimentos
+- 📊 **Visualização Inteligente**: Gráficos interativos e dashboard em tempo real
+- 🎨 **Design Premium**: Interface moderna com Dark Mode nativo e efeitos glassmorphism
+- 📱 **Mobile First**: Funciona perfeitamente em qualquer dispositivo
+- 🔐 **Seguro e Privado**: Seus dados são protegidos com criptografia JWT e BCrypt
+- 🚀 **PWA Instalável**: Instale como app nativo no celular ou desktop
+- 🎯 **Metas Financeiras**: Crie e acompanhe suas metas de economia com progresso visual
 
 ---
 
-## ⚙️ Configuração e Execução
+## 🚀 Features
 
-### 1. Pré-requisitos
-*   Go 1.23+ instalado.
-*   Node.js 18+ instalado.
-*   PostgreSQL rodando (Local ou Docker).
+<table>
+  <tr>
+    <td width="50%">
+      
+### 💼 Gestão Financeira
+- ✅ Dashboard inteligente com método 50/30/20
+- ✅ Adicionar, editar e excluir transações
+- ✅ Filtro por período (mês/ano)
+- ✅ Categorização automática
+- ✅ Gráficos interativos (PieChart)
+      
+    </td>
+    <td width="50%">
+      
+### 🎯 Metas & Conquistas
+- ✅ Criar metas de economia personalizadas
+- ✅ Acompanhamento visual de progresso
+- ✅ Adicionar valores incrementalmente
+- ✅ Notificações de conquista
+- ✅ Histórico de metas concluídas
+      
+    </td>
+  </tr>
+  <tr>
+    <td>
+      
+### 🎨 UX Premium
+- ✅ Dark Mode nativo
+- ✅ Animações fluidas
+- ✅ Feedback visual (Toasts)
+- ✅ Design responsivo total
+- ✅ PWA instalável
+      
+    </td>
+    <td>
+      
+### 🔐 Segurança
+- ✅ Autenticação JWT
+- ✅ Senhas criptografadas (BCrypt)
+- ✅ Dados privados por usuário
+- ✅ HTTPS em produção
+- ✅ Validação de entrada
+      
+    </td>
+  </tr>
+</table>
 
-### 2. Configurar Variáveis de Ambiente
-No diretório `backend/`, crie um arquivo `.env` baseado no `.env.example`:
+---
 
-```env
+## 🏗️ Arquitetura
+
+O Plena segue os princípios da **Clean Architecture**, garantindo código **desacoplado, testável e escalável**.
+
+```
+📦 plena-app
+├── 🔧 backend/          # API Go com Clean Architecture
+│   ├── cmd/api/         # Entry point (main.go)
+│   ├── internal/
+│   │   ├── core/        # Lógica de negócio pura
+│   │   │   ├── domain/  # Entidades (Transaction, User, Goal)
+│   │   │   ├── ports/   # Interfaces (contratos)
+│   │   │   └── services/ # Serviços de negócio
+│   │   ├── adapters/    # Camada externa
+│   │   │   ├── controllers/ # HTTP handlers
+│   │   │   ├── repository/  # Acesso ao banco
+│   │   │   └── router/      # Rotas e middlewares
+│   │   └── config/      # Configurações e env vars
+│   └── migrations/      # SQL scripts
+│
+└── 🎨 frontend/         # Next.js 16 + React 19
+    ├── src/app/         # Pages (Dashboard, Login, Register)
+    ├── src/components/  # Componentes reutilizáveis
+    └── public/          # Assets e PWA config
+```
+
+---
+
+## 🛠️ Stack Tecnológica
+
+### Backend
+![Go](https://img.shields.io/badge/Go-1.24-00ADD8?logo=go&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?logo=postgresql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000?logo=json-web-tokens)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
+
+- **Linguagem**: Go 1.24
+- **Database**: PostgreSQL 15
+- **Autenticação**: JWT + BCrypt
+- **Testes**: Testify, SQLMock
+- **Deploy**: Railway
+
+### Frontend
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-4-06B6D4?logo=tailwind-css&logoColor=white)
+
+- **Framework**: Next.js 16 + React 19
+- **Linguagem**: TypeScript 5
+- **Styling**: Tailwind CSS 4
+- **Gráficos**: Recharts
+- **Ícones**: Lucide React
+- **Notificações**: Sonner
+- **PWA**: @ducanh2912/next-pwa
+- **Deploy**: Vercel
+
+---
+
+## 🚀 Como Executar
+
+### Pré-requisitos
+- Go 1.24+
+- Node.js 18+
+- PostgreSQL 15+ (ou Docker)
+
+### 1️⃣ Clone o Repositório
+```bash
+git clone https://github.com/larissasthefanny/plena-app.git
+cd plena-app
+```
+
+### 2️⃣ Configure o Backend
+
+```bash
+cd backend
+
+# Crie o arquivo .env
+cat > .env << EOF
 DB_HOST=localhost
 DB_PORT=5432
-DB_USER=user
-DB_PASSWORD=passoword
+DB_USER=plena_user
+DB_PASSWORD=plena_password
 DB_NAME=plena_db
-JWT_SECRET=secret
+JWT_SECRET=seu_secret_super_seguro
 PORT=8080
-```
+ALLOWED_ORIGINS=http://localhost:3000,https://*.vercel.app
+EOF
 
-### 3. Rodar o Backend
-```bash
-cd backend
-go get ./...
+# Instale dependências e rode
+go mod download
 go run cmd/api/main.go
 ```
-O servidor iniciará em `http://localhost:8080`.
 
-### 4. Rodar o Frontend
+### 3️⃣ Configure o Frontend
+
 ```bash
 cd frontend
+
+# Instale dependências
 npm install
-npm run dev -- --webpack
-```
-Acesse `http://localhost:3000` no seu navegador.
 
-### 5. Rodar Testes
-```bash
-# Backend
-cd backend
-go test ./... -v
-
-# Frontend (se houver)
-cd frontend
-npm test
+# Rode o servidor dev
+npm run dev
 ```
 
----
-
-## 🔐 Funcionalidades
-
-1.  **Dashboard 50/30/20**: Visualização automática de quanto você já gastou das suas metas de Essenciais, Desejos e Investimentos.
-2.  **Gráficos Interativos**: Gráfico de rosca (PieChart) para melhor visualização da distribuição de gastos.
-3.  **CRUD Completo de Transações**: Adicione, edite e exclua receitas e despesas com facilidade.
-4.  **Metas Financeiras** 🎯:
-    *   Crie metas de economia com nome, valor alvo e prazo.
-    *   Acompanhe o progresso visualmente com barras de progresso.
-    *   Adicione valores incrementalmente à meta.
-    *   Receba notificação quando atingir 100% da meta.
-5.  **Feedback Visual**: Notificações modernas (Toasts) para todas as ações.
-6.  **Autenticação Completa**: Crie sua conta e faça login. Seus dados são privados e seguros.
-7.  **Filtro por Período**: Navegue entre meses para ver seu histórico de transações.
-8.  **PWA (Instalável)**: Instale o app no seu celular ou computador para acesso rápido e offline.
-9.  **Guia do Método**: Explicação interativa do método 50/30/20 integrada ao dashboard.
+### 4️⃣ Acesse a Aplicação
+- **Frontend**: http://localhost:3000
+- **Backend**: http://localhost:8080
 
 ---
 
 ## 🧪 Testes
 
-O projeto possui cobertura de testes unitários completa no backend:
+O projeto possui **cobertura completa de testes** no backend:
 
-*   **Controllers**: Testes de HTTP handlers (TransactionController, AuthController, GoalController)
-*   **Services**: Testes de lógica de negócio (TransactionService, AuthService, GoalService)
-*   **Repositories**: Testes de acesso ao banco com mocks (PostgresTransactionRepository, PostgresGoalRepository)
-*   **Router**: Testes de integração de rotas e middlewares
+```bash
+cd backend
+go test ./... -v -cover
+```
 
-**Total**: 30+ testes unitários ✅
-
----
-
-## 📝 Próximos Passos (Roadmap)
-
-*   [x] Edição e Exclusão de transações individuais.
-*   [x] Visualização gráfica (Gráfico de Rosca).
-*   [x] PWA (Instalar no celular).
-*   [x] Metas Financeiras (Goals).
-*   [ ] Recorrência automática de transações.
-*   [ ] Exportação de relatórios (PDF/CSV).
-*   [ ] Modo de simulação de investimentos.
+**Estatísticas**:
+- ✅ 30+ testes unitários
+- ✅ Controllers, Services e Repositories testados
+- ✅ Mocks para banco de dados (SQLMock)
+- ✅ Testes de integração de rotas
 
 ---
 
-Desenvolvido com 💜 por Larissa Sthefanny
+## 📱 PWA - Instale no seu Dispositivo
+
+O Plena pode ser instalado como um **app nativo**:
+
+1. Acesse [plena-financas.vercel.app](https://plena-financas.vercel.app)
+2. No navegador, clique em **"Instalar"** ou **"Adicionar à tela inicial"**
+3. Pronto! Use como app nativo 🎉
+
+---
+
+## 🎯 Roadmap
+
+- [x] Dashboard com método 50/30/20
+- [x] CRUD completo de transações
+- [x] Gráficos interativos
+- [x] Sistema de metas financeiras
+- [x] PWA instalável
+- [x] Autenticação segura
+- [x] Deploy em produção
+- [ ] Recorrência automática de transações
+- [ ] Exportação de relatórios (PDF/CSV)
+- [ ] Categorias customizáveis
+- [ ] Modo simulação de investimentos
+- [ ] App mobile nativo (React Native)
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT.
+
+---
+
+<p align="center">
+  <strong>Desenvolvido com 💜 por <a href="https://github.com/larissasthefanny">Larissa Sthefanny</a></strong>
+</p>
+
+<p align="center">
+  <a href="https://plena-financas.vercel.app/login">
+    <img src="https://img.shields.io/badge/⭐_Experimentar_Agora-7c3aed?style=for-the-badge" alt="Experimentar">
+  </a>
+</p>
