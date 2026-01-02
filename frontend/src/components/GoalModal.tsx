@@ -40,9 +40,10 @@ export default function GoalModal({ isOpen, onClose, goalToEdit }: GoalModalProp
 
         const token = localStorage.getItem("plena_token");
         const isEditing = !!goalToEdit;
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || `http://${window.location.hostname}:8080`;
         const endpoint = isEditing
-            ? `http://${window.location.hostname}:8080/api/goals/${goalToEdit.id}`
-            : `http://${window.location.hostname}:8080/api/goals`;
+            ? `${apiUrl}/api/goals/${goalToEdit.id}`
+            : `${apiUrl}/api/goals`;
         const method = isEditing ? "PUT" : "POST";
 
         try {
