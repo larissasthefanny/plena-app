@@ -37,28 +37,28 @@ export default function GoalCard({ goal, onEdit, onDelete, onAddProgress }: Goal
 
     return (
         <div className="p-6 rounded-3xl bg-[#111] border border-zinc-800 hover:border-purple-500/30 transition-all group">
-            <div className="flex flex-col sm:flex-row justify-between items-start gap-3 mb-4">
-                <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="flex justify-between items-start gap-3 mb-4">
+                <div className="flex items-center gap-3 min-w-0 flex-1 overflow-hidden">
                     <div className={`p-3 rounded-2xl flex-shrink-0 ${isCompleted ? 'bg-emerald-500/10 text-emerald-400' : 'bg-purple-500/10 text-purple-400'} transition-colors`}>
                         <Target className="w-6 h-6" />
                     </div>
-                    <div className="min-w-0 flex-1">
+                    <div className="min-w-0 flex-1 overflow-hidden">
                         <h4 className="font-semibold text-white truncate">{goal.name}</h4>
-                        <p className="text-xs text-zinc-500 break-words">Prazo: {formatDate(goal.deadline)}</p>
+                        <p className="text-xs text-zinc-500 truncate">Prazo: {formatDate(goal.deadline)}</p>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                <div className="flex items-center gap-2 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex-shrink-0">
                     <button
                         onClick={handleAddProgress}
-                        className="p-2 text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-full transition-colors"
+                        className="p-2 text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-full transition-colors active:scale-95"
                         title="Adicionar progresso"
                     >
                         <Plus className="w-4 h-4" />
                     </button>
                     <button
                         onClick={() => onDelete(goal.id)}
-                        className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-colors"
+                        className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-colors active:scale-95"
                         title="Excluir meta"
                     >
                         <Trash2 className="w-4 h-4" />
