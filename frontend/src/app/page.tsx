@@ -290,11 +290,11 @@ export default function Home() {
   ].filter(d => d.value > 0);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20 text-white p-6 sm:p-8 font-sans selection:bg-purple-500/30 relative">
+    <main className="min-h-screen bg-black text-white p-6 sm:p-8 font-sans selection:bg-purple-500/30 relative">
       {/* Background decorativo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-purple-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-pink-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-purple-500/[0.03] rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-pink-500/[0.03] rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative z-10">
@@ -358,8 +358,8 @@ export default function Home() {
           </header>
 
           <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl relative overflow-hidden group hover:bg-white/[0.07] transition-all">
-              <div className="absolute top-0 right-0 p-32 bg-purple-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+            <div className="p-8 rounded-3xl bg-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl relative overflow-hidden group hover:bg-white/[0.04] transition-all">
+              <div className="absolute top-0 right-0 p-32 bg-purple-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
 
               <div className="relative z-10">
                 <div className="flex items-center gap-3 text-zinc-400 mb-3">
@@ -377,8 +377,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col justify-center relative overflow-hidden hover:bg-white/[0.07] transition-all">
-              <div className="absolute bottom-0 left-0 p-32 bg-green-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
+            <div className="p-8 rounded-3xl bg-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl flex flex-col justify-center relative overflow-hidden hover:bg-white/[0.04] transition-all">
+              <div className="absolute bottom-0 left-0 p-32 bg-green-500/5 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
 
               <div className="relative z-10">
                 <div className="flex items-center gap-3 text-zinc-400 mb-3">
@@ -415,7 +415,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Needs - 50% */}
-            <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-blue-500/30 hover:bg-white/[0.07] transition-all group">
+            <div className="p-6 rounded-3xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:border-blue-500/30 hover:bg-white/[0.04] transition-all group">
               <div className="flex justify-between items-start mb-6">
                 <div className="p-3 bg-blue-500/10 rounded-2xl text-blue-400 group-hover:bg-blue-500/20 transition-colors">
                   <HomeIcon className="w-6 h-6" />
@@ -442,7 +442,7 @@ export default function Home() {
             </div>
 
             {/* Wants - 30% */}
-            <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-purple-500/30 hover:bg-white/[0.07] transition-all group">
+            <div className="p-6 rounded-3xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:border-purple-500/30 hover:bg-white/[0.04] transition-all group">
               <div className="flex justify-between items-start mb-6">
                 <div className="p-3 bg-purple-500/10 rounded-2xl text-purple-400 group-hover:bg-purple-500/20 transition-colors">
                   <Sparkles className="w-6 h-6" />
@@ -469,7 +469,7 @@ export default function Home() {
             </div>
 
             {/* Savings - 20% */}
-            <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-emerald-500/30 hover:bg-white/[0.07] transition-all group">
+            <div className="p-6 rounded-3xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:border-emerald-500/30 hover:bg-white/[0.04] transition-all group">
               <div className="flex justify-between items-start mb-6">
                 <div className="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400 group-hover:bg-emerald-500/20 transition-colors">
                   <TrendingUp className="w-6 h-6" />
@@ -502,7 +502,7 @@ export default function Home() {
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-semibold text-zinc-200">Distribuição de Gastos</h3>
           </div>
-          <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center relative min-h-[320px] hover:bg-white/[0.07] transition-all">
+          <div className="p-6 rounded-3xl bg-white/[0.02] backdrop-blur-xl border border-white/5 flex items-center justify-center relative min-h-[320px] hover:bg-white/[0.04] transition-all">
             {chartData.length > 0 ? (
               <div className="w-full h-64 relative">
                 <ResponsiveContainer width="100%" height="100%">
@@ -580,12 +580,12 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 border border-dashed border-zinc-800 rounded-3xl bg-zinc-900/20">
-              <div className="inline-flex items-center justify-center p-4 bg-zinc-800 rounded-full mb-4 text-zinc-500">
+            <div className="text-center py-12 border border-dashed border-white/5 rounded-3xl bg-white/[0.02] backdrop-blur-xl">
+              <div className="inline-flex items-center justify-center p-4 bg-white/[0.02] rounded-full mb-4 text-zinc-600">
                 <Target className="w-6 h-6" />
               </div>
-              <p className="text-zinc-400 font-medium">Nenhuma meta ainda</p>
-              <p className="text-zinc-600 text-sm mt-1">Crie sua primeira meta financeira</p>
+              <p className="text-zinc-300 font-medium">Nenhuma meta ainda</p>
+              <p className="text-zinc-500 text-sm mt-1">Crie sua primeira meta financeira</p>
             </div>
           )}
         </section>
@@ -598,7 +598,7 @@ export default function Home() {
 
           <div className="space-y-3">
             {transactions.slice(0, 5).map((item, i) => (
-              <div key={i} className="flex items-center justify-between p-5 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/[0.07] hover:border-white/20 transition-all group">
+              <div key={i} className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-white/10 transition-all group">
                 <div className="flex items-center gap-4">
                   <div className={`p-3 rounded-xl ${item.type === 'income'
                     ? 'bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20'
@@ -635,8 +635,8 @@ export default function Home() {
             ))}
 
             {!loading && transactions.length === 0 && (
-              <div className="text-center py-16 border border-dashed border-white/10 rounded-3xl bg-white/5 backdrop-blur-xl">
-                <div className="inline-flex items-center justify-center p-4 bg-white/5 rounded-full mb-4 text-zinc-500">
+              <div className="text-center py-16 border border-dashed border-white/5 rounded-3xl bg-white/[0.02] backdrop-blur-xl">
+                <div className="inline-flex items-center justify-center p-4 bg-white/[0.02] rounded-full mb-4 text-zinc-600">
                   <Wallet className="w-8 h-8" />
                 </div>
                 <p className="text-zinc-300 font-semibold text-lg">Nenhuma transação ainda</p>
