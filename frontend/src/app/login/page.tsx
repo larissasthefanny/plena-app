@@ -61,50 +61,52 @@ export default function LoginPage() {
                 {/* Lado esquerdo - Hero Section */}
                 <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12">
                     <div className="max-w-md space-y-8">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full backdrop-blur-sm">
-                            <Sparkles className="w-4 h-4 text-purple-400" />
-                            <span className="text-sm text-purple-300">Método 50/30/20 Automático</span>
+                        <div>
+                            <h1 className="text-5xl font-bold text-white leading-tight mb-4">
+                                Pare de se surpreender
+                                <span className="block bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+                                    no fim do mês
+                                </span>
+                            </h1>
+                            <p className="text-lg text-gray-300">
+                                Saiba exatamente pra onde seu dinheiro está indo.
+                            </p>
                         </div>
-                        
-                        <h1 className="text-5xl font-bold text-white leading-tight">
-                            Transforme sua
-                            <span className="block bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
-                                relação com o dinheiro
-                            </span>
-                        </h1>
-                        
-                        <p className="text-xl text-gray-300">
-                            Gerencie suas finanças de forma inteligente e alcance seus objetivos financeiros.
-                        </p>
 
-                        <div className="space-y-4 pt-4">
-                            <div className="flex items-center gap-3">
-                                <div className="flex-shrink-0 w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
-                                    <span className="text-purple-400">📊</span>
+                        <div className="space-y-5 pt-6">
+                            <div className="flex gap-4">
+                                <div className="flex-shrink-0 pt-1">
+                                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center">
+                                        <span className="text-white text-sm font-bold">✓</span>
+                                    </div>
                                 </div>
                                 <div>
-                                    <h3 className="text-white font-medium">Dashboard Inteligente</h3>
-                                    <p className="text-sm text-gray-400">Visualize seus gastos em tempo real</p>
+                                    <p className="text-white font-medium">Veja exatamente pra onde seu dinheiro está indo</p>
+                                    <p className="text-sm text-gray-400 mt-1">Categorias automáticas e gráficos que fazem sentido</p>
                                 </div>
                             </div>
                             
-                            <div className="flex items-center gap-3">
-                                <div className="flex-shrink-0 w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
-                                    <span className="text-purple-400">🎯</span>
+                            <div className="flex gap-4">
+                                <div className="flex-shrink-0 pt-1">
+                                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center">
+                                        <span className="text-white text-sm font-bold">✓</span>
+                                    </div>
                                 </div>
                                 <div>
-                                    <h3 className="text-white font-medium">Metas Financeiras</h3>
-                                    <p className="text-sm text-gray-400">Crie e acompanhe suas conquistas</p>
+                                    <p className="text-white font-medium">Saiba quanto pode gastar sem culpa</p>
+                                    <p className="text-sm text-gray-400 mt-1">Método 50/30/20 funciona automaticamente</p>
                                 </div>
                             </div>
                             
-                            <div className="flex items-center gap-3">
-                                <div className="flex-shrink-0 w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
-                                    <span className="text-purple-400">🔒</span>
+                            <div className="flex gap-4">
+                                <div className="flex-shrink-0 pt-1">
+                                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center">
+                                        <span className="text-white text-sm font-bold">✓</span>
+                                    </div>
                                 </div>
                                 <div>
-                                    <h3 className="text-white font-medium">100% Seguro</h3>
-                                    <p className="text-sm text-gray-400">Seus dados protegidos com criptografia</p>
+                                    <p className="text-white font-medium">Alcance suas metas financeiras com segurança</p>
+                                    <p className="text-sm text-gray-400 mt-1">Acompanhe progresso e celebre suas conquistas</p>
                                 </div>
                             </div>
                         </div>
@@ -115,14 +117,14 @@ export default function LoginPage() {
                 <div className="flex items-center justify-center w-full lg:w-1/2 p-6 sm:p-12">
                     <div className="w-full max-w-md">
                         {/* Card do formulário */}
-                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-8 space-y-8">
+                        <div className="bg-white/8 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-purple-500/20 p-8 space-y-8">
                             {/* Header */}
                             <div className="text-center space-y-2">
                                 <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
                                     Plena
                                 </h2>
                                 <p className="text-gray-400">
-                                    Entre para gerenciar suas finanças
+                                    Organize suas finanças agora
                                 </p>
                             </div>
 
@@ -183,11 +185,11 @@ export default function LoginPage() {
                                         {loading ? (
                                             <>
                                                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                                Entrando...
+                                                Organizando...
                                             </>
                                         ) : (
                                             <>
-                                                Entrar
+                                                Organizar meu dinheiro
                                                 <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
                                             </>
                                         )}
@@ -209,7 +211,7 @@ export default function LoginPage() {
                             <button
                                 onClick={handleGoogleLogin}
                                 type="button"
-                                className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                                className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 text-white font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                             >
                                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
