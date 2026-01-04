@@ -78,3 +78,28 @@ func (s *AuthService) generateToken(userID int) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(s.jwtSecret)
 }
+
+func (s *AuthService) LoginOrRegisterWithGoogle(email, name string) (string, error) {
+	user, err := s.userRepo.GetByEmail(email)
+	if err == nil {
+		return s.generateToken(user.ID)
+	}
+
+	randomPassword := make([]byte, 32)
+	hashedPassword, err := bcrypt.GenerateFromPassword(randomPassword, bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+
+	newUser := domain.User{
+		Email:    email,
+		Password: string(hashedPassword),
+	}
+
+	id, err := s.userRepo.Save(newUser)
+	if err != nil {
+		return "", err
+	}
+
+	return s.generateToken(id)
+}

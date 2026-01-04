@@ -6,6 +6,7 @@ import (
 
 	"github.com/larissasthefanny/plena-app/backend/internal/adapters/clients/database"
 	"github.com/larissasthefanny/plena-app/backend/internal/adapters/controllers"
+	"github.com/larissasthefanny/plena-app/backend/internal/adapters/handler"
 	"github.com/larissasthefanny/plena-app/backend/internal/adapters/repository"
 	"github.com/larissasthefanny/plena-app/backend/internal/adapters/router"
 	"github.com/larissasthefanny/plena-app/backend/internal/config"
@@ -39,8 +40,9 @@ func main() {
 	transController := controllers.NewTransactionController(transactionService)
 	authController := controllers.NewAuthController(authService)
 	goalController := controllers.NewGoalController(goalService)
+	oauthHandler := handler.NewOAuthHandler(authService)
 
-	appRouter := router.NewRouter(transController, authController, goalController, cfg)
+	appRouter := router.NewRouter(transController, authController, goalController, oauthHandler, cfg)
 	handler := appRouter.Setup()
 
 	log.Printf("Server starting on port %s...", cfg.Port)

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/larissasthefanny/plena-app/backend/internal/adapters/controllers"
+	"github.com/larissasthefanny/plena-app/backend/internal/adapters/handler"
 	"github.com/larissasthefanny/plena-app/backend/internal/config"
 )
 
@@ -12,14 +13,16 @@ type Router struct {
 	transController *controllers.TransactionController
 	authController  *controllers.AuthController
 	goalController  *controllers.GoalController
+	oauthHandler    *handler.OAuthHandler
 	config          *config.AppConfig
 }
 
-func NewRouter(tc *controllers.TransactionController, ac *controllers.AuthController, gc *controllers.GoalController, cfg *config.AppConfig) *Router {
+func NewRouter(tc *controllers.TransactionController, ac *controllers.AuthController, gc *controllers.GoalController, oh *handler.OAuthHandler, cfg *config.AppConfig) *Router {
 	return &Router{
 		transController: tc,
 		authController:  ac,
 		goalController:  gc,
+		oauthHandler:    oh,
 		config:          cfg,
 	}
 }
@@ -30,6 +33,10 @@ func (router *Router) Setup() http.Handler {
 	mux.HandleFunc("/api/health", router.transController.HealthCheck)
 	mux.HandleFunc("/api/register", router.authController.Register)
 	mux.HandleFunc("/api/login", router.authController.Login)
+
+	// OAuth routes
+	mux.HandleFunc("GET /api/auth/google", router.oauthHandler.HandleGoogleLogin)
+	mux.HandleFunc("GET /api/auth/google/callback", router.oauthHandler.HandleGoogleCallback)
 
 	mux.HandleFunc("/api/income", controllers.AuthMiddleware(router.transController.CreateIncome))
 	mux.HandleFunc("/api/expense", controllers.AuthMiddleware(router.transController.CreateExpense))
