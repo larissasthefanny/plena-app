@@ -31,6 +31,7 @@ type TransactionService interface {
 type AuthService interface {
 	Register(email, password string) (string, error)
 	Login(email, password string) (string, error)
+	LoginOrRegisterWithGoogle(email, name string) (string, error)
 }
 
 type GoalRepository interface {

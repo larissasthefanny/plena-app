@@ -98,6 +98,11 @@ func (m *MockAuthService) Login(email, password string) (string, error) {
 	return args.String(0), args.Error(1)
 }
 
+func (m *MockAuthService) LoginOrRegisterWithGoogle(email, name string) (string, error) {
+	args := m.Called(email, name)
+	return args.String(0), args.Error(1)
+}
+
 func TestLogin_Controller_Success(t *testing.T) {
 	mockService := new(MockAuthService)
 	controller := NewAuthController(mockService)

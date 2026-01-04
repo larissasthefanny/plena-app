@@ -79,3 +79,44 @@ func TestLogin_Success(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, token)
 }
+
+func TestLoginOrRegisterWithGoogle_ExistingUser(t *testing.T) {
+	mockRepo := new(MockUserRepository)
+	secret := "mysecret"
+	service := services.NewAuthService(mockRepo, secret)
+
+	email := "google@example.com"
+	name := "Google User"
+
+	// Usuário já existe
+	mockRepo.On("GetByEmail", email).Return(domain.User{ID: 1, Email: email}, nil)
+
+	token, err := service.LoginOrRegisterWithGoogle(email, name)
+
+	assert.NoError(t, err)
+	assert.NotEmpty(t, token)
+	mockRepo.AssertCalled(t, "GetByEmail", email)
+	mockRepo.AssertNotCalled(t, "Save", mock.Anything)
+}
+
+func TestLoginOrRegisterWithGoogle_NewUser(t *testing.T) {
+	mockRepo := new(MockUserRepository)
+	secret := "mysecret"
+	service := services.NewAuthService(mockRepo, secret)
+
+	email := "newgoogle@example.com"
+	name := "New Google User"
+
+	// Usuário não existe
+	mockRepo.On("GetByEmail", email).Return(domain.User{}, assert.AnError)
+	mockRepo.On("Save", mock.MatchedBy(func(u domain.User) bool {
+		return u.Email == email && u.Password != ""
+	})).Return(1, nil)
+
+	token, err := service.LoginOrRegisterWithGoogle(email, name)
+
+	assert.NoError(t, err)
+	assert.NotEmpty(t, token)
+	mockRepo.AssertCalled(t, "GetByEmail", email)
+	mockRepo.AssertCalled(t, "Save", mock.Anything)
+}

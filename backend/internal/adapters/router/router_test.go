@@ -12,6 +12,7 @@ import (
 
 	"github.com/larissasthefanny/plena-app/backend/internal/adapters/controllers"
 	"github.com/larissasthefanny/plena-app/backend/internal/adapters/router"
+	"github.com/larissasthefanny/plena-app/backend/internal/config"
 	"github.com/larissasthefanny/plena-app/backend/internal/core/domain"
 )
 
@@ -21,6 +22,9 @@ type MockAuthService struct {
 
 func (m *MockAuthService) Register(e, p string) (string, error) { return "token", nil }
 func (m *MockAuthService) Login(e, p string) (string, error)    { return "token", nil }
+func (m *MockAuthService) LoginOrRegisterWithGoogle(email, name string) (string, error) {
+	return "token", nil
+}
 
 type MockTransService struct {
 	mock.Mock
@@ -61,8 +65,11 @@ func TestRouter_HealthCheck(t *testing.T) {
 	tc := controllers.NewTransactionController(&MockTransService{})
 	ac := controllers.NewAuthController(&MockAuthService{})
 	gc := controllers.NewGoalController(&MockGoalService{})
+	cfg := &config.AppConfig{
+		AllowedOrigins: []string{"http://localhost:3000"},
+	}
 
-	r := router.NewRouter(tc, ac, gc)
+	r := router.NewRouter(tc, ac, gc, nil, cfg)
 	handler := r.Setup()
 
 	req := httptest.NewRequest("GET", "/api/health", nil)
@@ -80,8 +87,11 @@ func TestRouter_AuthMiddleware_BlocksRequest(t *testing.T) {
 	tc := controllers.NewTransactionController(&MockTransService{})
 	ac := controllers.NewAuthController(&MockAuthService{})
 	gc := controllers.NewGoalController(&MockGoalService{})
+	cfg := &config.AppConfig{
+		AllowedOrigins: []string{"http://localhost:3000"},
+	}
 
-	r := router.NewRouter(tc, ac, gc)
+	r := router.NewRouter(tc, ac, gc, nil, cfg)
 	handler := r.Setup()
 
 	req := httptest.NewRequest("GET", "/api/transactions", nil)
