@@ -75,6 +75,7 @@
       
 ### 🔐 Segurança
 - ✅ Autenticação JWT
+- ✅ **Login com Google OAuth**
 - ✅ Senhas criptografadas (BCrypt)
 - ✅ Dados privados por usuário
 - ✅ HTTPS em produção
@@ -120,12 +121,14 @@ O Plena segue os princípios da **Clean Architecture**, garantindo código **des
 ![Go](https://img.shields.io/badge/Go-1.24-00ADD8?logo=go&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?logo=postgresql&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-Auth-000000?logo=json-web-tokens)
+![OAuth](https://img.shields.io/badge/Google_OAuth-2.0-4285F4?logo=google)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
 
 - **Linguagem**: Go 1.24
 - **Database**: PostgreSQL 15
-- **Autenticação**: JWT + BCrypt
-- **Testes**: Testify, SQLMock
+- **Autenticação**: JWT + BCrypt + Google OAuth 2.0
+- **OAuth**: golang.org/x/oauth2
+- **Testes**: Testify, SQLMock (32+ testes)
 - **Deploy**: Railway
 
 ### Frontend
@@ -173,12 +176,20 @@ DB_NAME=plena_db
 JWT_SECRET=seu_secret_super_seguro
 PORT=8080
 ALLOWED_ORIGINS=http://localhost:3000,https://*.vercel.app
+
+# Google OAuth (opcional - para login com Google)
+GOOGLE_CLIENT_ID=seu-google-client-id
+GOOGLE_CLIENT_SECRET=seu-google-client-secret
+GOOGLE_REDIRECT_URL=http://localhost:8080/api/auth/google/callback
+FRONTEND_URL=http://localhost:3000
 EOF
 
 # Instale dependências e rode
 go mod download
 go run cmd/api/main.go
 ```
+
+> 💡 **Login com Google**: Para configurar, siga o [guia de OAuth](docs/OAUTH.md)
 
 ### 3️⃣ Configure o Frontend
 
