@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Mail, Lock, UserPlus, Sparkles, TrendingUp, PiggyBank, Shield } from "lucide-react";
+import { Mail, Lock, UserPlus, Sparkles, TrendingUp, PiggyBank, Shield, Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -12,9 +12,34 @@ export default function RegisterPage() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const passwordRequirements = {
+        minLength: password.length >= 8,
+        hasUpperCase: /[A-Z]/.test(password),
+        hasLowerCase: /[a-z]/.test(password),
+        hasNumber: /[0-9]/.test(password),
+        hasSpecial: /[+_!@#$%^&*,]/.test(password),
+    };
+
+    const isPasswordValid = Object.values(passwordRequirements).every(Boolean);
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        if (!isEmailValid) {
+            setError("Por favor, insira um email válido.");
+            return;
+        }
+
+        if (!isPasswordValid) {
+            setError("A senha não atende aos requisitos de segurança.");
+            return;
+        }
+
         if (password !== confirmPassword) {
             setError("As senhas não coincidem.");
             return;
@@ -165,10 +190,22 @@ export default function RegisterPage() {
                                         required
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="block w-full pl-12 pr-4 py-3.5 rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-xl text-white placeholder-zinc-500 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 focus:bg-white/[0.05] transition-all sm:text-sm outline-none"
+                                        className={`block w-full pl-12 pr-12 py-3.5 rounded-xl border transition-all bg-white/[0.02] backdrop-blur-xl text-white placeholder-zinc-500 focus:ring-2 focus:bg-white/[0.05] focus:border-purple-500/50 focus:ring-purple-500/20 sm:text-sm outline-none ${
+                                            email && !isEmailValid ? 'border-red-500/50' : 'border-white/10'
+                                        }`}
                                         placeholder="seu@email.com"
                                     />
+                                    {email && (
+                                        <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
+                                            <span className={`text-lg font-medium ${isEmailValid ? 'text-emerald-400' : 'text-red-400'}`}>
+                                                {isEmailValid ? '✓' : '✗'}
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
+                                {email && !isEmailValid && (
+                                    <p className="text-xs text-red-400 mt-2">Email inválido. Use o formato: seu@email.com</p>
+                                )}
                             </div>
 
                             <div>
@@ -181,14 +218,70 @@ export default function RegisterPage() {
                                     </div>
                                     <input
                                         id="password"
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
                                         required
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="block w-full pl-12 pr-4 py-3.5 rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-xl text-white placeholder-zinc-500 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 focus:bg-white/[0.05] transition-all sm:text-sm outline-none"
+                                        onFocus={() => setShowPasswordRequirements(true)}
+                                        className="block w-full pl-12 pr-12 py-3.5 rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-xl text-white placeholder-zinc-500 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 focus:bg-white/[0.05] transition-all sm:text-sm outline-none"
                                         placeholder="••••••••"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-zinc-500 hover:text-zinc-300 transition-colors"
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff className="h-5 w-5" />
+                                        ) : (
+                                            <Eye className="h-5 w-5" />
+                                        )}
+                                    </button>
                                 </div>
+
+                                {/* Password Requirements */}
+                                {showPasswordRequirements && password && (
+                                    <div className="mt-3 space-y-2 p-4 rounded-xl bg-white/[0.02] backdrop-blur-xl border border-white/10">
+                                        <p className="text-xs font-medium text-zinc-300 mb-3">Sua senha deve conter:</p>
+                                        
+                                        <div className="space-y-2">
+                                            <div className="flex items-center gap-2">
+                                                <div className={`w-1.5 h-1.5 rounded-full transition-colors ${passwordRequirements.minLength ? 'bg-emerald-400' : 'bg-zinc-600'}`}></div>
+                                                <span className={`text-xs transition-colors ${passwordRequirements.minLength ? 'text-emerald-400' : 'text-zinc-500'}`}>
+                                                    Pelo menos 8 caracteres
+                                                </span>
+                                            </div>
+
+                                            <div className="flex items-center gap-2">
+                                                <div className={`w-1.5 h-1.5 rounded-full transition-colors ${passwordRequirements.hasUpperCase ? 'bg-emerald-400' : 'bg-zinc-600'}`}></div>
+                                                <span className={`text-xs transition-colors ${passwordRequirements.hasUpperCase ? 'text-emerald-400' : 'text-zinc-500'}`}>
+                                                    Pelo menos uma letra maiúscula
+                                                </span>
+                                            </div>
+
+                                            <div className="flex items-center gap-2">
+                                                <div className={`w-1.5 h-1.5 rounded-full transition-colors ${passwordRequirements.hasLowerCase ? 'bg-emerald-400' : 'bg-zinc-600'}`}></div>
+                                                <span className={`text-xs transition-colors ${passwordRequirements.hasLowerCase ? 'text-emerald-400' : 'text-zinc-500'}`}>
+                                                    Pelo menos uma letra minúscula
+                                                </span>
+                                            </div>
+
+                                            <div className="flex items-center gap-2">
+                                                <div className={`w-1.5 h-1.5 rounded-full transition-colors ${passwordRequirements.hasNumber ? 'bg-emerald-400' : 'bg-zinc-600'}`}></div>
+                                                <span className={`text-xs transition-colors ${passwordRequirements.hasNumber ? 'text-emerald-400' : 'text-zinc-500'}`}>
+                                                    Pelo menos um número
+                                                </span>
+                                            </div>
+
+                                            <div className="flex items-center gap-2">
+                                                <div className={`w-1.5 h-1.5 rounded-full transition-colors ${passwordRequirements.hasSpecial ? 'bg-emerald-400' : 'bg-zinc-600'}`}></div>
+                                                <span className={`text-xs transition-colors ${passwordRequirements.hasSpecial ? 'text-emerald-400' : 'text-zinc-500'}`}>
+                                                    Pelo menos um símbolo (+_!@#$%^&*,)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             <div>
@@ -201,19 +294,30 @@ export default function RegisterPage() {
                                     </div>
                                     <input
                                         id="confirmPassword"
-                                        type="password"
+                                        type={showConfirmPassword ? "text" : "password"}
                                         required
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
-                                        className="block w-full pl-12 pr-4 py-3.5 rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-xl text-white placeholder-zinc-500 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 focus:bg-white/[0.05] transition-all sm:text-sm outline-none"
+                                        className="block w-full pl-12 pr-12 py-3.5 rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-xl text-white placeholder-zinc-500 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 focus:bg-white/[0.05] transition-all sm:text-sm outline-none"
                                         placeholder="••••••••"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-zinc-500 hover:text-zinc-300 transition-colors"
+                                    >
+                                        {showConfirmPassword ? (
+                                            <EyeOff className="h-5 w-5" />
+                                        ) : (
+                                            <Eye className="h-5 w-5" />
+                                        )}
+                                    </button>
                                 </div>
                             </div>
 
                             <button
                                 type="submit"
-                                disabled={loading}
+                                disabled={loading || !isPasswordValid || !isEmailValid}
                                 className="w-full py-4 px-6 text-base font-semibold rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:from-purple-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-[1.02] active:scale-[0.98]"
                             >
                                 {loading ? "Criando conta..." : "Criar Conta"}
