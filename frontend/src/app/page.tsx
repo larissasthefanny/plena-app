@@ -72,7 +72,6 @@ export default function Home() {
     if (currentDate) {
       fetchTransactions();
       fetchGoals();
-      // Salvar mês selecionado no localStorage
       localStorage.setItem("plena_selected_month", currentDate.toISOString());
     }
   }, [currentDate, fetchTransactions, fetchGoals]);
