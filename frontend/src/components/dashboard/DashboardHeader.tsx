@@ -31,28 +31,47 @@ export default function DashboardHeader({
   };
 
   return (
-    <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 py-4 backdrop-blur-sm">
-      <div className="flex items-center gap-3 w-full md:w-auto">
-        <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl shadow-lg shadow-purple-900/50">
-          <LayoutDashboard className="w-6 h-6 text-white" />
+    <header className="flex flex-col gap-3 py-4 backdrop-blur-sm">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl shadow-lg shadow-purple-900/50 flex-shrink-0">
+            <LayoutDashboard className="w-6 h-6 text-white" />
+          </div>
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 truncate">
+              Plena
+            </h1>
+            <p className="text-xs text-gray-500 font-medium tracking-wide">DASHBOARD</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
-            Plena
-          </h1>
-          <p className="text-xs text-gray-500 font-medium tracking-wide">DASHBOARD</p>
+
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <button
+            onClick={onReset}
+            title="Resetar Dados"
+            className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-all duration-300 backdrop-blur-sm"
+          >
+            <RotateCcw className="w-5 h-5" />
+          </button>
+          <button
+            onClick={onLogout}
+            title="Sair"
+            className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300 backdrop-blur-sm"
+          >
+            <LogOut className="w-5 h-5" />
+          </button>
         </div>
       </div>
 
-      <div className="flex items-center justify-between w-full md:w-auto gap-4">
-        <div className="flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-purple-500/20 rounded-full p-1 pl-4 pr-1 shadow-lg">
-          <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-purple-500/20 rounded-full p-1 pl-4 pr-1 shadow-lg min-w-0 overflow-x-auto">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <Calendar className="w-4 h-4 text-purple-400" />
-            <span className={`text-sm font-semibold capitalize ${isCurrentMonth() ? 'text-purple-300' : 'text-zinc-300'}`}>
+            <span className={`text-xs sm:text-sm font-semibold capitalize whitespace-nowrap ${isCurrentMonth() ? 'text-purple-300' : 'text-zinc-300'}`}>
               {formatCurrentMonth(currentDate)}
             </span>
           </div>
-          <div className="flex gap-1">
+          <div className="flex gap-1 flex-shrink-0">
             <button 
               onClick={onPrevMonth} 
               className="p-2 hover:bg-white/10 rounded-full text-zinc-400 hover:text-white transition-all"
@@ -70,7 +89,7 @@ export default function DashboardHeader({
             {!isCurrentMonth() && (
               <button 
                 onClick={onGoToToday}
-                className="px-3 py-2 ml-1 text-xs font-semibold text-purple-300 hover:text-purple-200 bg-purple-500/20 hover:bg-purple-500/30 rounded-full transition-all border border-purple-500/30"
+                className="px-2 sm:px-3 py-1.5 sm:py-2 ml-1 text-xs font-semibold text-purple-300 hover:text-purple-200 bg-purple-500/20 hover:bg-purple-500/30 rounded-full transition-all border border-purple-500/30 flex-shrink-0 whitespace-nowrap"
                 title="Voltar para hoje"
               >
                 Hoje
@@ -79,30 +98,13 @@ export default function DashboardHeader({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onReset}
-            title="Resetar Dados"
-            className="p-2.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-all duration-300 backdrop-blur-sm"
-          >
-            <RotateCcw className="w-5 h-5" />
-          </button>
-          <button
-            onClick={onLogout}
-            title="Sair"
-            className="p-2.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300 backdrop-blur-sm"
-          >
-            <LogOut className="w-5 h-5" />
-          </button>
-          <div className="w-px h-8 bg-white/10 mx-1 hidden md:block"></div>
-          <button
-            onClick={onNewTransaction}
-            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-full text-sm font-semibold transition-all shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 active:scale-95"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Nova</span>
-          </button>
-        </div>
+        <button
+          onClick={onNewTransaction}
+          className="flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-full text-sm font-semibold transition-all shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 active:scale-95 flex-shrink-0 w-full sm:w-auto"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Nova</span>
+        </button>
       </div>
     </header>
   );
