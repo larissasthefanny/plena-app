@@ -52,7 +52,7 @@ export default function TransactionsList({ transactions, loading, onEdit, onDele
                 {item.type === 'income' ? '+' : '-'} {formatCurrency(item.amount)}
               </span>
 
-              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                 <button onClick={() => onEdit(item)} className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors">
                   <Pencil className="w-4 h-4" />
                 </button>

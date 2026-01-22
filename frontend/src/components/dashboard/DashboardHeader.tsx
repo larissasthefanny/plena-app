@@ -1,9 +1,10 @@
-import { LogOut, RotateCcw, Plus, LayoutDashboard, ChevronLeft, ChevronRight } from "lucide-react";
+import { LogOut, RotateCcw, Plus, LayoutDashboard, ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 
 interface DashboardHeaderProps {
-  currentDate: Date;
+  currentDate: Date | null;
   onPrevMonth: () => void;
   onNextMonth: () => void;
+  onGoToToday: () => void;
   onReset: () => void;
   onLogout: () => void;
   onNewTransaction: () => void;
@@ -13,12 +14,20 @@ export default function DashboardHeader({
   currentDate,
   onPrevMonth,
   onNextMonth,
+  onGoToToday,
   onReset,
   onLogout,
   onNewTransaction
 }: DashboardHeaderProps) {
-  const formatCurrentMonth = (date: Date) => {
+  const formatCurrentMonth = (date: Date | null) => {
+    if (!date) return "";
     return date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+  };
+
+  const isCurrentMonth = () => {
+    if (!currentDate) return false;
+    const today = new Date();
+    return currentDate.getMonth() === today.getMonth() && currentDate.getFullYear() === today.getFullYear();
   };
 
   return (
@@ -36,15 +45,37 @@ export default function DashboardHeader({
       </div>
 
       <div className="flex items-center justify-between w-full md:w-auto gap-4">
-        <div className="flex items-center gap-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full p-1 pl-4 pr-1 shadow-lg">
-          <span className="text-sm font-medium text-zinc-300 capitalize">{formatCurrentMonth(currentDate)}</span>
+        <div className="flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-purple-500/20 rounded-full p-1 pl-4 pr-1 shadow-lg">
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-purple-400" />
+            <span className={`text-sm font-semibold capitalize ${isCurrentMonth() ? 'text-purple-300' : 'text-zinc-300'}`}>
+              {formatCurrentMonth(currentDate)}
+            </span>
+          </div>
           <div className="flex gap-1">
-            <button onClick={onPrevMonth} className="p-2 hover:bg-white/10 rounded-full text-zinc-400 hover:text-white transition-all">
+            <button 
+              onClick={onPrevMonth} 
+              className="p-2 hover:bg-white/10 rounded-full text-zinc-400 hover:text-white transition-all"
+              title="Mês anterior"
+            >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <button onClick={onNextMonth} className="p-2 hover:bg-white/10 rounded-full text-zinc-400 hover:text-white transition-all">
+            <button 
+              onClick={onNextMonth} 
+              className="p-2 hover:bg-white/10 rounded-full text-zinc-400 hover:text-white transition-all"
+              title="Próximo mês"
+            >
               <ChevronRight className="w-4 h-4" />
             </button>
+            {!isCurrentMonth() && (
+              <button 
+                onClick={onGoToToday}
+                className="px-3 py-2 ml-1 text-xs font-semibold text-purple-300 hover:text-purple-200 bg-purple-500/20 hover:bg-purple-500/30 rounded-full transition-all border border-purple-500/30"
+                title="Voltar para hoje"
+              >
+                Hoje
+              </button>
+            )}
           </div>
         </div>
 

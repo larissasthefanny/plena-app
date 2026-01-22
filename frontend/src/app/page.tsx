@@ -37,12 +37,21 @@ interface Goal {
 
 export default function Home() {
   const router = useRouter();
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
   const [transactionToEdit, setTransactionToEdit] = useState<Transaction | null>(null);
   const [goalToEdit, setGoalToEdit] = useState<Goal | null>(null);
+
+  useEffect(() => {
+    const savedMonth = localStorage.getItem("plena_selected_month");
+    if (savedMonth) {
+      setCurrentDate(new Date(savedMonth));
+    } else {
+      setCurrentDate(new Date());
+    }
+  }, []);
 
   const {
     transactions,
@@ -60,16 +69,26 @@ export default function Home() {
   } = useGoals();
 
   useEffect(() => {
-    fetchTransactions();
-    fetchGoals();
-  }, [fetchTransactions, fetchGoals]);
+    if (currentDate) {
+      fetchTransactions();
+      fetchGoals();
+      // Salvar mês selecionado no localStorage
+      localStorage.setItem("plena_selected_month", currentDate.toISOString());
+    }
+  }, [currentDate, fetchTransactions, fetchGoals]);
 
   const prevMonth = () => {
+    if (!currentDate) return;
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
   };
 
   const nextMonth = () => {
+    if (!currentDate) return;
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  };
+
+  const goToToday = () => {
+    setCurrentDate(new Date());
   };
 
   const handleOpenModal = (transaction: Transaction | null = null) => {
@@ -124,6 +143,7 @@ export default function Home() {
             currentDate={currentDate}
             onPrevMonth={prevMonth}
             onNextMonth={nextMonth}
+            onGoToToday={goToToday}
             onReset={resetTransactions}
             onLogout={handleLogout}
             onNewTransaction={() => handleOpenModal()}

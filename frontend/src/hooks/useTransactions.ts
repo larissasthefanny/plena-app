@@ -15,12 +15,14 @@ interface Transaction {
   user_id: number;
 }
 
-export function useTransactions(currentDate: Date) {
+export function useTransactions(currentDate: Date | null) {
   const router = useRouter();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchTransactions = useCallback(async () => {
+    if (!currentDate) return;
+    
     const token = localStorage.getItem("plena_token");
     if (!token) {
       router.push("/login");
