@@ -1,0 +1,24 @@
+# Global owners - these owners will be requested for review on every pull request
+@larissasthefanny
+
+# Backend code owners
+/backend/ @larissasthefanny
+/backend/internal/adapters/ @larissasthefanny
+/backend/internal/core/ @larissasthefanny
+/backend/migrations/ @larissasthefanny
+/backend/scripts/ @larissasthefanny
+
+# Frontend code owners
+/frontend/ @larissasthefanny
+/frontend/src/app/ @larissasthefanny
+/frontend/src/components/ @larissasthefanny
+/frontend/src/hooks/ @larissasthefanny
+/frontend/src/utils/ @larissasthefanny
+
+# Documentation
+/docs/ @larissasthefanny
+README.md @larissasthefanny
+
+# Configuration files
+docker-compose.yml @larissasthefanny
+.github/ @larissasthefanny
