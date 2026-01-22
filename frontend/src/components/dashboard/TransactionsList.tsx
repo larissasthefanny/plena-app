@@ -21,42 +21,42 @@ interface TransactionsListProps {
 
 export default function TransactionsList({ transactions, loading, onEdit, onDelete }: TransactionsListProps) {
   return (
-    <section>
+    <section className="pb-24 md:pb-0">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-lg font-semibold text-zinc-200">Últimas Transações</h3>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2 md:space-y-3">
         {transactions.slice(0, 5).map((item, i) => (
-          <div key={i} className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-white/10 transition-all group">
-            <div className="flex items-center gap-4">
-              <div className={`p-3 rounded-xl ${item.type === 'income'
+          <div key={i} className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4 p-3 md:p-5 rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:bg-white/[0.04] hover:border-white/10 transition-all group">
+            <div className="flex items-start md:items-center gap-3 md:gap-4 min-w-0 flex-1">
+              <div className={`p-2 md:p-3 rounded-xl flex-shrink-0 ${item.type === 'income'
                 ? 'bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20'
                 : 'bg-red-500/10 text-red-400 group-hover:bg-red-500/20'
                 } transition-colors`}>
-                {item.type === 'income' ? <ArrowUpCircle className="w-5 h-5" /> : <ArrowDownCircle className="w-5 h-5" />}
+                {item.type === 'income' ? <ArrowUpCircle className="w-4 md:w-5 h-4 md:h-5" /> : <ArrowDownCircle className="w-4 md:w-5 h-4 md:h-5" />}
               </div>
-              <div>
-                <h4 className="font-semibold text-zinc-100">{item.category}</h4>
+              <div className="min-w-0 flex-1">
+                <h4 className="font-semibold text-sm md:text-base text-zinc-100 truncate">{item.category}</h4>
                 {item.description && (
-                  <p className="text-sm text-zinc-400">{item.description}</p>
+                  <p className="text-xs md:text-sm text-zinc-400 truncate">{item.description}</p>
                 )}
-                <p className="text-xs text-zinc-600 mt-1">
+                <p className="text-xs text-zinc-600 mt-0.5">
                   {new Date(item.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <span className={`font-bold text-lg ${item.type === 'income' ? 'text-emerald-400' : 'text-zinc-200'}`}>
+            <div className="flex items-center justify-between gap-2 md:gap-4">
+              <span className={`font-bold text-sm md:text-lg flex-shrink-0 ${item.type === 'income' ? 'text-emerald-400' : 'text-zinc-200'}`}>
                 {item.type === 'income' ? '+' : '-'} {formatCurrency(item.amount)}
               </span>
 
-              <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                <button onClick={() => onEdit(item)} className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors">
+              <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex-shrink-0">
+                <button onClick={() => onEdit(item)} className="p-1.5 md:p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors" title="Editar">
                   <Pencil className="w-4 h-4" />
                 </button>
-                <button onClick={() => onDelete(item.id)} className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors">
+                <button onClick={() => onDelete(item.id)} className="p-1.5 md:p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors" title="Deletar">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>

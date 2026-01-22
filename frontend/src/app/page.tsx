@@ -125,7 +125,7 @@ export default function Home() {
   );
 
   return (
-    <main className="min-h-screen bg-black text-white p-6 sm:p-8 font-sans selection:bg-purple-500/30 relative">
+    <main className="min-h-screen bg-black text-white p-6 sm:p-8 pb-6 sm:pb-8 font-sans selection:bg-purple-500/30 relative">
       {/* Background decorativo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-purple-500/[0.03] rounded-full blur-3xl"></div>
